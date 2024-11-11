@@ -29,9 +29,7 @@ public class UsuarioService {
         usuario.setNome(usuarioDetails.getNome());
         usuario.setEmail(usuarioDetails.getEmail());
         usuario.setSenha(usuarioDetails.getSenha());
-        usuario.setImg_perfil(usuarioDetails.getImg_perfil());
-        System.out.println("Usuario Details:" + usuarioDetails);
-        System.out.println("Usuario :" + usuario);
+        usuario.setPerfil(usuarioDetails.getPerfil());
         return usuarioRepository.save(usuario);
     }
 

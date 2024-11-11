@@ -10,10 +10,10 @@ public interface PontoCarregamentoRepository extends JpaRepository<PontoCarregam
     @Query("SELECT p FROM PontoCarregamento p WHERE p.disponibilidade = :disponibilidade")
     PontoCarregamento findByDisponibilidade(String disponibilidade);
 
-    @Query("SELECT p FROM PontoCarregamento p WHERE p.tipoConector = :tipoConector")
+    @Query("SELECT p FROM PontoCarregamento p WHERE p.conector = :tipoConector")
     PontoCarregamento findByTipoConector(String tipoConector);
 
-    @Query("SELECT p FROM PontoCarregamento p WHERE p.velocidade_carregamento = :velocidadeCarregamento")
+    @Query("SELECT p FROM PontoCarregamento p WHERE p.carregamento = :velocidadeCarregamento")
     PontoCarregamento findByVelocidadeCarregamento(Integer velocidadeCarregamento);
 
     @Query("SELECT p FROM PontoCarregamento p WHERE p.reservavel = :reservavel")

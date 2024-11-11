@@ -1,11 +1,13 @@
 package br.com.example.ecocharge.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,22 +19,28 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ponto_carregamento")
+@Table(name = "GS_PONTO_CARREGAMENTO")
 public class PontoCarregamento {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ponto_id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pontoCarregamento")
+    @SequenceGenerator(name = "pontoCarregamento", sequenceName = "GS_PONTO_CARREGAMENTO_SEQ", allocationSize = 1)
+    @Column(name = "ponto_id")
+    private Long id;
 
     @OneToOne
-    @JoinColumn(name = "posto_id")
-    private PostoCarregamento posto_id;
+    @JoinColumn(name = "POSTO_ID")
+    private PostoCarregamento posto;
 
-    private String tipoConector;
+    @Column(name = "TIPO_CONECTOR")
+    private String conector;
 
-    private int velocidade_carregamento;
+    @Column(name = "VELOCIDADE_CARREGAMENTO")
+    private int carregamento;
 
+    @Column(name = "DISPONIBILIDADE")
     private String disponibilidade;
 
+    @Column(name = "RESERVAVEL")
     private char reservavel;
 
 }

@@ -91,8 +91,7 @@ public class UsuarioController {
 
             var imgURL = destinationFile.getFileName().toString();
             Usuario usuario = usuarioService.findById(id);
-            usuario.setImg_perfil(imgURL);
-            System.out.println("Update Controller: " + usuario);
+            usuario.setPerfil(imgURL);
             usuarioService.update(id, usuario);
 
             return ResponseEntity.ok("Imagem de perfil salva");
