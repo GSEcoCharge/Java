@@ -1,13 +1,10 @@
 package br.com.example.ecocharge.controller;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.service.UsuarioService;
@@ -71,32 +67,16 @@ public class UsuarioController {
 
     @PostMapping("/{id}/upload")
     public ResponseEntity<String> uploadImg(@PathVariable Long id, @RequestBody MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new RuntimeException("O arquivo está vazio");
+        try {
+            String response = usuarioService.uploadImage(id, file);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        Path path = Path.of("src/main/resources/static/files/");
-        if (!Files.exists(path)) {
-            try {
-                Files.createDirectories(path);
-            } catch (Exception e) {
-                throw new RuntimeException("Erro ao criar o diretório", e);
-            }
-        }
-        Path destinationFile = path.resolve(Paths.get(System.currentTimeMillis() + file.getOriginalFilename()))
-                .normalize().toAbsolutePath();
+    }
 
-        try (InputStream is = file.getInputStream()) {
-            Files.copy(is, destinationFile);
-            System.out.println("Arquivo copiado");
-
-            var imgURL = destinationFile.getFileName().toString();
-            Usuario usuario = usuarioService.findById(id);
-            usuario.setPerfil(imgURL);
-            usuarioService.update(id, usuario);
-
-            return ResponseEntity.ok("Imagem de perfil salva");
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao salvar o arquivo", e);
-        }
+    @GetMapping("/img/{fileName}")
+    public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws IOException {
+        return usuarioService.getImage(fileName);
     }
 }
