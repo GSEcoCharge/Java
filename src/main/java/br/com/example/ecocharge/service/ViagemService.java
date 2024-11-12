@@ -2,7 +2,11 @@ package br.com.example.ecocharge.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import br.com.example.ecocharge.model.Reserva;
 import br.com.example.ecocharge.model.Viagem;
 import br.com.example.ecocharge.repository.ViagemRepository;
 
@@ -26,5 +30,19 @@ public class ViagemService {
 
     public void deleteById(Long id) {
         viagemRepository.deleteById(id);
+    }
+
+    public Viagem update(Long id, Viagem viagem) {
+        verificarId(id);
+        viagem.setId(id);
+        return viagemRepository.save(viagem);
+    }
+
+    public void verificarId(Long id){
+        viagemRepository.
+        findById(id)
+        .orElseThrow(
+            ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado")
+        );
     }
 }

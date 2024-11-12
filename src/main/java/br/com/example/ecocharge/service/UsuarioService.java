@@ -12,11 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import br.com.example.ecocharge.model.Reserva;
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.repository.UsuarioRepository;
 
@@ -31,19 +35,31 @@ public class UsuarioService {
     }
 
     public Usuario findById(Long id) {
-        return usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrado o usuário com o id: " + id));
+        return usuarioRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Não foi encontrado o usuário com o id: " + id));
     }
 
     public Usuario create(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario update(Long id, Usuario usuarioDetails) {
-        Usuario usuario = findById(id);
-        usuario.setNome(usuarioDetails.getNome());
-        usuario.setEmail(usuarioDetails.getEmail());
-        usuario.setSenha(usuarioDetails.getSenha());
-        usuario.setPerfil(usuarioDetails.getPerfil());
+    public Usuario create(OAuth2User principal) {
+        var usuario = new Usuario();
+        usuario.setNome(principal.getAttribute("name"));
+        usuario.setEmail(principal.getAttribute("email"));
+        usuario.setPerfil(principal.getAttribute("picture"));
+        usuario.setUltima_localizacao(principal.getAttribute("locale"));
+        return usuarioRepository.save(usuario);
+    }
+
+    public Usuario findByEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    }
+
+    public Usuario update(Long id, Usuario usuario) {
+        verificarId(id);
+        usuario.setId(id);
         return usuarioRepository.save(usuario);
     }
 
@@ -101,6 +117,13 @@ public class UsuarioService {
                 .contentType(MediaType.IMAGE_JPEG)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }    
+
+    public void verificarId(Long id){
+        usuarioRepository.
+        findById(id)
+        .orElseThrow(
+            ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado")
+        );
     }
-    
 }
