@@ -1,4 +1,17 @@
 # Nome do pipeline
+- task: Maven@4
+  inputs:
+    azureSubscription: 'Azure for Students(871d90f9-6fc9-41f7-8fbe-cf8c078c198e)'
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.17'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+    
 name: Build_Java_Project_$(Build.BuildId)
 
 # Este pipeline será iniciado manualmente para cumprir o requisito
