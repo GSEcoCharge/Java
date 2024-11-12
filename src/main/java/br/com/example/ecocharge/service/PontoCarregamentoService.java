@@ -20,20 +20,20 @@ public class PontoCarregamentoService {
         return pontoCarregamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrado o ponto de carregamento com o id: " + id));
     }
 
-    public PontoCarregamento findByTipoConector(String tipoConector) {
-        return pontoCarregamentoRepository.findByTipoConector(tipoConector);
+    public List<PontoCarregamento> findAllByTipoConector(String tipoConector) {
+        return pontoCarregamentoRepository.findAllByTipoConector(tipoConector);
     }
 
-    public PontoCarregamento findByVelocidadeCarregamento(int velocidadeCarregamento) {
-        return pontoCarregamentoRepository.findByVelocidadeCarregamento(velocidadeCarregamento);
+    public List<PontoCarregamento> findAllByVelocidadeCarregamento(int velocidadeCarregamento) {
+        return pontoCarregamentoRepository.findAllByVelocidadeCarregamento(velocidadeCarregamento);
     }
     
-    public PontoCarregamento findByDisponibilidade(String disponibilidade) {
-        return pontoCarregamentoRepository.findByDisponibilidade(disponibilidade);
+    public List<PontoCarregamento> findAllByDisponibilidade(String disponibilidade) {
+        return pontoCarregamentoRepository.findAllByDisponibilidade(disponibilidade);
     }
 
-    public PontoCarregamento findByReservavel(char reservavel) {
-        return pontoCarregamentoRepository.findByReservavel(reservavel);
+    public List<PontoCarregamento> findAllByReservavel(char reservavel) {
+        return pontoCarregamentoRepository.findAllByReservavel(reservavel);
     }
 
     public PontoCarregamento create(PontoCarregamento pontoCarregamento) {

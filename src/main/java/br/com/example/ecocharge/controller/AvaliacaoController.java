@@ -29,6 +29,16 @@ public class AvaliacaoController {
         return avaliacaoService.findAll();
     }
 
+    @GetMapping("/usuario/{id}")
+    public List<Avaliacao> getAvaliacoesByUsuario(@PathVariable Long id) {
+        return avaliacaoService.findAllByUsuarioId(id);
+    }
+
+    @GetMapping("/posto/{id}")
+    public List<Avaliacao> getAvaliacoesByPosto(@PathVariable Long id) {
+        return avaliacaoService.findAllByPostoId(id);
+    } 
+
     @GetMapping("/{id}")
     public ResponseEntity<Avaliacao> getAvaliacaoById(@PathVariable Long id) {
         Avaliacao avaliacao = avaliacaoService.findById(id);
@@ -38,17 +48,7 @@ public class AvaliacaoController {
     @PostMapping
     public Avaliacao createAvaliacao(@RequestBody Avaliacao avaliacao) {
         return avaliacaoService.create(avaliacao);
-    }
-
-    @GetMapping("/usuario/{id}")
-    public Avaliacao getAvaliacaoByUsuario(@PathVariable Long id) {
-        return avaliacaoService.findByUsuarioId(id);
-    }
-
-    @GetMapping("/posto/{id}")
-    public Avaliacao getAvaliacaoByPosto(@PathVariable Long id) {
-        return avaliacaoService.findByPostoId(id);
-    }    
+    }   
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAvaliacao(@PathVariable Long id) {

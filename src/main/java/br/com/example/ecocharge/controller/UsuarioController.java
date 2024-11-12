@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.service.UsuarioService;
 
+@CrossOrigin(origins = {"*"}, maxAge = 3600)
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -65,7 +67,7 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping("/{id}/upload")
+    @PostMapping("/perfil/{id}")
     public ResponseEntity<String> uploadImg(@PathVariable Long id, @RequestBody MultipartFile file) {
         try {
             String response = usuarioService.uploadImage(id, file);
@@ -75,8 +77,13 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/img/{fileName}")
-    public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws IOException {
-        return usuarioService.getImage(fileName);
+    @GetMapping("/perfil/{fileName}")
+    public ResponseEntity<Resource> getImageByName(@PathVariable String fileName) throws IOException {
+        return usuarioService.getImageByName(fileName);
+    }
+
+    @GetMapping("perfil/{id}")
+    public ResponseEntity<Resource> getImageById(@PathVariable Long id) throws IOException {
+        return usuarioService.getImageById(id);
     }
 }

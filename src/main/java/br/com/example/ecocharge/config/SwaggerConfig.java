@@ -10,7 +10,7 @@ public class SwaggerConfig{
     @Bean
     public OpenAPI swaggerConfig() {
         return new OpenAPI().info(new Info()
-            .title("API CGenius")
+            .title("EcoCharge API")
         );
     }
 }

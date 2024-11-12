@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import br.com.example.ecocharge.model.PontoCarregamento;
 import br.com.example.ecocharge.service.PontoCarregamentoService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -30,23 +29,23 @@ public class PontoCarregamentoController {
     }
 
     @GetMapping("/conector/{conector}")
-    public PontoCarregamento getPontoCarregamentoByConector(@RequestParam String conector) {
-        return pontoCarregamentoService.findByTipoConector(conector);
+    public List<PontoCarregamento> getPontosCarregamentoByConector(@PathVariable String conector) {
+        return pontoCarregamentoService.findAllByTipoConector(conector);
     }
     
     @GetMapping("/potencia/{potencia}")
-    public PontoCarregamento getPontoCarregamentoByPotencia(@RequestParam int potencia) {
-        return pontoCarregamentoService.findByVelocidadeCarregamento(potencia);
+    public List<PontoCarregamento> getPontosCarregamentoByPotencia(@PathVariable int potencia) {
+        return pontoCarregamentoService.findAllByVelocidadeCarregamento(potencia);
     }
 
     @GetMapping("/disponibilidade/{disponibilidade}")
-    public PontoCarregamento getPontoCarregamentoByDisponibilidade(@RequestParam String disponibilidade) {
-        return pontoCarregamentoService.findByDisponibilidade(disponibilidade);
+    public List<PontoCarregamento> getPontosCarregamentoByDisponibilidade(@PathVariable String disponibilidade) {
+        return pontoCarregamentoService.findAllByDisponibilidade(disponibilidade);
     }
     
     @GetMapping("/reservavel/{reservavel}")
-    public PontoCarregamento getPontoCarregamentoByReservavel(@RequestParam char reservavel) {
-        return pontoCarregamentoService.findByReservavel(reservavel);
+    public List<PontoCarregamento> getPontosCarregamentoByReservavel(@PathVariable char reservavel) {
+        return pontoCarregamentoService.findAllByReservavel(reservavel);
     }
 
     @PostMapping
@@ -54,7 +53,7 @@ public class PontoCarregamentoController {
         return pontoCarregamentoService.create(pontoCarregamento);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/perfil/{id}")
     public ResponseEntity<Void> deletePontoCarregamento(@PathVariable Long id) {
         pontoCarregamentoService.deleteById(id);
         return ResponseEntity.noContent().build();

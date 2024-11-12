@@ -29,20 +29,20 @@ public class VeiculoController {
         return veiculoService.findAll();
     }
 
+    @GetMapping("/autonomia/{autonomia}")
+    public List<Veiculo> getVeiculosByAutonomia(@PathVariable int autonomia) {
+        return veiculoService.findAllByAutonomia(autonomia);
+    }
+
+    @GetMapping("/conector/{conector}")
+    public List<Veiculo> getVeiculosByConector(@PathVariable String conector) {
+        return veiculoService.findAllByConector(conector);
+    }    
+
     @GetMapping("/{id}")
     public ResponseEntity<Veiculo> getVeiculoById(@PathVariable Long id) {
         Veiculo veiculo = veiculoService.findById(id);
         return ResponseEntity.ok(veiculo);
-    }
-
-    @GetMapping("/autonomia/{autonomia}")
-    public Veiculo getVeiculoByAutonomia(@PathVariable int autonomia) {
-        return veiculoService.findByAutonomia(autonomia);
-    }
-
-    @GetMapping("/conector/{conector}")
-    public Veiculo getVeiculoByConector(@PathVariable String conector) {
-        return veiculoService.findByConector(conector);
     }
 
     @PostMapping

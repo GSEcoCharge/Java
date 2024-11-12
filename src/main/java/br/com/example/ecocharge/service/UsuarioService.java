@@ -2,6 +2,7 @@ package br.com.example.ecocharge.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -80,7 +81,19 @@ public class UsuarioService {
         }
     }
 
-    public ResponseEntity<Resource> getImage(String fileName) throws IOException {
+    public ResponseEntity<Resource> getImageByName(String fileName) throws IOException {
+        Path path = Paths.get("src/main/resources/static/files/" + fileName);
+        Resource resource = new UrlResource(path.toUri());
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    public ResponseEntity<Resource> getImageById(Long id) throws MalformedURLException {
+        Usuario usuario = findById(id);
+        String fileName = usuario.getPerfil();
         Path path = Paths.get("src/main/resources/static/files/" + fileName);
         Resource resource = new UrlResource(path.toUri());
         

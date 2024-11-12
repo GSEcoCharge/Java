@@ -16,16 +16,16 @@ public class AvaliacaoService {
         return avaliacaoRepository.findAll();
     }
 
+    public List<Avaliacao> findAllByUsuarioId(Long id) {
+        return avaliacaoRepository.findAllByUsuarioId(id);
+    }
+
+    public List<Avaliacao> findAllByPostoId(Long id) {
+        return avaliacaoRepository.findAllByPostoId(id);
+    }
+
     public Avaliacao findById(Long id) {
         return avaliacaoRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrada a avaliação com o id: " + id));
-    }
-
-    public Avaliacao findByUsuarioId(Long id) {
-        return avaliacaoRepository.findByUsuarioId(id);
-    }
-
-    public Avaliacao findByPostoId(Long id) {
-        return avaliacaoRepository.findByPostoId(id);
     }
 
     public Avaliacao create(Avaliacao avaliacao) {
