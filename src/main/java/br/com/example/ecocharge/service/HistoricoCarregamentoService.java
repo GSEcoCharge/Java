@@ -1,12 +1,11 @@
 package br.com.example.ecocharge.service;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import br.com.example.ecocharge.model.Avaliacao;
 import br.com.example.ecocharge.model.HistoricoCarregamento;
 import br.com.example.ecocharge.repository.HistoricoCarregamentoRepository;
 
