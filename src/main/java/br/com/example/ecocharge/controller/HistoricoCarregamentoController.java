@@ -41,6 +41,28 @@ public class HistoricoCarregamentoController {
         return ResponseEntity.ok(historicoCarregamento);
     }
 
+    @GetMapping("/usuario/{usuarioId}")
+    @Operation(summary = "Lista todos os históricos de carregamento por usuário.", description = "Endpoint que retorna uma lista de históricos de carregamento para um usuário específico")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de históricos de carregamento retornada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public List<HistoricoCarregamento> getHistoricosCarregamentoByUsuarioId(@PathVariable Long usuarioId) {
+        return historicoCarregamentoService.findAllByUsuarioId(usuarioId);
+    }
+
+    @GetMapping("/ponto/{pontoId}")
+    @Operation(summary = "Lista todos os históricos de carregamento por ponto.", description = "Endpoint que retorna uma lista de históricos de carregamento para um ponto específico")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de históricos de carregamento retornada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Ponto não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public List<HistoricoCarregamento> getHistoricosCarregamentoByPontoId(@PathVariable Long pontoId) {
+        return historicoCarregamentoService.findAllByPontoId(pontoId);
+    }
+
     @PostMapping
     @Operation(summary = "Cria um novo histórico de carregamento.", description = "Endpoint para criar um novo histórico de carregamento")
     @ApiResponses(value = {

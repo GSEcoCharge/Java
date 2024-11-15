@@ -54,6 +54,28 @@ public class ReservaController {
         return ResponseEntity.ok(reserva);
     }
 
+    @GetMapping("/usuario/{id}")
+    @Operation(summary = "Lista todas as reservas de um usuário específico.", description = "Endpoint que retorna uma lista de reservas de um usuário com um ID informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public List<Reserva> getReservasByUsuarioId(@PathVariable Long id) {
+        return reservaService.findAllByUsuarioId(id);
+    }
+
+    @GetMapping("/ponto/{id}")
+    @Operation(summary = "Lista todas as reservas de um ponto específico.", description = "Endpoint que retorna uma lista de reservas de um ponto com um ID informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Ponto não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public List<Reserva> getReservasByPontoId(@PathVariable Long id) {
+        return reservaService.findAllByPontoId(id);
+    }
+
     @PostMapping
     @ResponseStatus(CREATED)
     @Operation(summary = "Cria uma nova reserva.", description = "Endpoint para criar uma nova reserva")

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import br.com.example.ecocharge.model.Reserva;
 import br.com.example.ecocharge.repository.ReservaRepository;
 
@@ -21,6 +22,14 @@ public class ReservaService {
 
     public Reserva findById(Long id) {
         return reservaRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrada a reserva com o id: " + id));
+    }
+
+    public List<Reserva> findAllByUsuarioId(Long id) {
+        return reservaRepository.findAllByUsuarioId(id);
+    }
+
+    public List<Reserva> findAllByPontoId(Long id) {
+        return reservaRepository.findAllByPontoId(id);
     }
 
     public Reserva create(Reserva reserva) {

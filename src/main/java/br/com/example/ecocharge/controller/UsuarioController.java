@@ -121,17 +121,6 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/perfil/{fileName}")
-    @Operation(summary = "Retorna uma imagem de perfil pelo nome do arquivo.", description = "Endpoint que retorna uma imagem de perfil com um nome de arquivo informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Imagem de perfil retornada com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Imagem de perfil não encontrada"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public ResponseEntity<Resource> getImageByName(@PathVariable String fileName) throws IOException {
-        return usuarioService.getImageByName(fileName);
-    }
-
     @GetMapping("perfil/{id}")
     @Operation(summary = "Retorna uma imagem de perfil pelo ID do usuário.", description = "Endpoint que retorna uma imagem de perfil com um ID de usuário informado")
     @ApiResponses(value = {

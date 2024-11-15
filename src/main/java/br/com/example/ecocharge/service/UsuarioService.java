@@ -1,6 +1,5 @@
 package br.com.example.ecocharge.service;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -19,6 +18,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.repository.UsuarioRepository;
 
@@ -93,16 +93,6 @@ public class UsuarioService {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao salvar o arquivo");
         }
-    }
-
-    public ResponseEntity<Resource> getImageByName(String fileName) throws IOException {
-        Path path = Paths.get("src/main/resources/static/files/" + fileName);
-        Resource resource = new UrlResource(path.toUri());
-        
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
     }
 
     public ResponseEntity<Resource> getImageById(Long id) throws MalformedURLException {

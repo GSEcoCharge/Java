@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import br.com.example.ecocharge.model.HistoricoCarregamento;
 import br.com.example.ecocharge.repository.HistoricoCarregamentoRepository;
 
@@ -25,6 +26,14 @@ public class HistoricoCarregamentoService {
 
     public HistoricoCarregamento create(HistoricoCarregamento historicoCarregamento) {
         return historicoCarregamentoRepository.save(historicoCarregamento);
+    }
+
+    public List<HistoricoCarregamento> findAllByUsuarioId(Long id) {
+        return historicoCarregamentoRepository.findAllByUsuarioId(id);
+    }
+
+    public List<HistoricoCarregamento> findAllByPontoId(Long id) {
+        return historicoCarregamentoRepository.findAllByPontoId(id);
     }
 
     public void deleteById(Long id) {

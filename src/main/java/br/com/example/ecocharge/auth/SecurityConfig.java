@@ -21,7 +21,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                    .anyRequest().authenticated())
+                    .anyRequest().permitAll())
             // .oauth2Login(login -> login
             //         .loginPage("/login")
             //         .defaultSuccessUrl("/", true)
