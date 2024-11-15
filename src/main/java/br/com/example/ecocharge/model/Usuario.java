@@ -44,7 +44,7 @@ public class Usuario {
     private Date criacao;
     
     @Column(name = "ULTIMA_LOCALIZACAO")
-    private String ultima_localizacao;
+    private String localizacao;
 
     @PrePersist
     protected void onCreate() {

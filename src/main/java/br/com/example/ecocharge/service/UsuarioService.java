@@ -14,19 +14,31 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.example.ecocharge.chat.ChatService;
+import br.com.example.ecocharge.mail.EmailService;
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
-
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private PasswordEncoder passwordEncoder;
+    
+    private final UsuarioRepository usuarioRepository;
+    private final ChatService chatService;
+    private final EmailService emailService;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, ChatService chatService, EmailService emailService) {
+        this.usuarioRepository = usuarioRepository;
+        this.chatService = chatService;
+        this.emailService = emailService;
+    }
 
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
@@ -38,6 +50,9 @@ public class UsuarioService {
     }
 
     public Usuario create(Usuario usuario) {
+        String script = chatService.sentToAi(usuario);
+        emailService.sendEmail(usuario.getEmail(), "Bem-vindo ao EcoCharge!", script);
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
 
@@ -46,7 +61,7 @@ public class UsuarioService {
         usuario.setNome(principal.getAttribute("name"));
         usuario.setEmail(principal.getAttribute("email"));
         usuario.setPerfil(principal.getAttribute("picture"));
-        usuario.setUltima_localizacao(principal.getAttribute("locale"));
+        usuario.setLocalizacao(principal.getAttribute("locale"));
         return usuarioRepository.save(usuario);
     }
 
