@@ -3,6 +3,8 @@ package br.com.example.ecocharge.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,8 +18,20 @@ public class ReservaService {
     @Autowired
     private ReservaRepository reservaRepository;
 
-    public List<Reserva> findAll() {
-        return reservaRepository.findAll();
+    public Page<Reserva> findAll(Pageable pageable) {
+        return reservaRepository.findAll(pageable);
+    }
+
+    public Page<Reserva> findAllByStatusAndData(String status, String data, Pageable pageable) {
+        return reservaRepository.findAllByStatusAndData(status, data, pageable);
+    }
+
+    public Page<Reserva> findAllByStatus(String status, Pageable pageable) {
+        return reservaRepository.findAllByStatus(status, pageable);
+    }
+
+    public Page<Reserva> findAllByData(String data, Pageable pageable) {
+        return reservaRepository.findAllByData(data, pageable);
     }
 
     public Reserva findById(Long id) {

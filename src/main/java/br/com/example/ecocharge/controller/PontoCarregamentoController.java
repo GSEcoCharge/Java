@@ -1,9 +1,24 @@
 package br.com.example.ecocharge.controller;
 
-import java.util.List;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import br.com.example.ecocharge.model.PontoCarregamento;
 import br.com.example.ecocharge.service.PontoCarregamentoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,14 +34,41 @@ public class PontoCarregamentoController {
     @Autowired
     private PontoCarregamentoService pontoCarregamentoService;
 
+    @Autowired
+    PagedResourcesAssembler<PontoCarregamento> pageAssembler;
+
     @GetMapping
     @Operation(summary = "Lista todos os pontos de carregamento cadastrados no sistema.", description = "Endpoint que retorna uma lista de objetos do tipo ponto de carregamento")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de pontos de carregamento retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<PontoCarregamento> index() {
-        return pontoCarregamentoService.findAll();
+    public PagedModel<EntityModel<PontoCarregamento>> index(
+        @RequestParam(required = false) String disponibilidade,
+        @RequestParam(required = false) String tipoConector,
+        @RequestParam(required = false) Integer velocidadeCarregamento,
+        @RequestParam(required = false) Character reservavel,
+        @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+
+        Page<PontoCarregamento> page = null;
+        
+        if( velocidadeCarregamento != null && tipoConector != null && reservavel != null) {
+            page = pontoCarregamentoService.findAllByTipoConectorAndPotenciaAndReservavel(tipoConector, velocidadeCarregamento, reservavel, pageable);
+        }  else if (tipoConector != null && reservavel != null) {
+            page = pontoCarregamentoService.findAllByTipoConectorAndReservavel(tipoConector, reservavel, pageable);
+        } else if (disponibilidade != null) {
+            page = pontoCarregamentoService.findAllByDisponibilidade(disponibilidade, pageable);
+        } else if (tipoConector != null) {
+            page = pontoCarregamentoService.findAllByTipoConector(tipoConector, pageable);
+        } else if (velocidadeCarregamento != null) {
+            page = pontoCarregamentoService.findAllByVelocidadeCarregamento(velocidadeCarregamento, pageable);
+        } else if (reservavel != null) {
+            page = pontoCarregamentoService.findAllByReservavel(reservavel, pageable);
+        } else {
+            page = pontoCarregamentoService.findAll(pageable);
+        }
+    
+        return pageAssembler.toModel(page, pontoCarregamento -> EntityModel.of(pontoCarregamento));
     }
 
     @GetMapping("/{id}")
@@ -47,8 +89,10 @@ public class PontoCarregamentoController {
         @ApiResponse(responseCode = "200", description = "Lista de pontos de carregamento retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<PontoCarregamento> getPontosCarregamentoByConector(@PathVariable String conector) {
-        return pontoCarregamentoService.findAllByTipoConector(conector);
+    public PagedModel<EntityModel<PontoCarregamento>> getPontosCarregamentoByConector(@PathVariable String conector,
+    @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        Page<PontoCarregamento> page = pontoCarregamentoService.findAllByTipoConector(conector, pageable);
+        return pageAssembler.toModel(page, pontoCarregamento -> EntityModel.of(pontoCarregamento));
     }
 
     @GetMapping("/potencia/{potencia}")
@@ -57,8 +101,10 @@ public class PontoCarregamentoController {
         @ApiResponse(responseCode = "200", description = "Lista de pontos de carregamento retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<PontoCarregamento> getPontosCarregamentoByPotencia(@PathVariable int potencia) {
-        return pontoCarregamentoService.findAllByVelocidadeCarregamento(potencia);
+    public PagedModel<EntityModel<PontoCarregamento>> getPontosCarregamentoByPotencia(@PathVariable int potencia,
+    @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        Page<PontoCarregamento> page = pontoCarregamentoService.findAllByVelocidadeCarregamento(potencia, pageable);
+        return pageAssembler.toModel(page, pontoCarregamento -> EntityModel.of(pontoCarregamento));
     }
 
     @GetMapping("/disponibilidade/{disponibilidade}")
@@ -67,8 +113,10 @@ public class PontoCarregamentoController {
         @ApiResponse(responseCode = "200", description = "Lista de pontos de carregamento retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<PontoCarregamento> getPontosCarregamentoByDisponibilidade(@PathVariable String disponibilidade) {
-        return pontoCarregamentoService.findAllByDisponibilidade(disponibilidade);
+    public PagedModel<EntityModel<PontoCarregamento>> getPontosCarregamentoByDisponibilidade(@PathVariable String disponibilidade,
+    @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        Page<PontoCarregamento> page = pontoCarregamentoService.findAllByDisponibilidade(disponibilidade, pageable);
+        return pageAssembler.toModel(page, pontoCarregamento -> EntityModel.of(pontoCarregamento));
     }
 
     @GetMapping("/reservavel/{reservavel}")
@@ -77,8 +125,10 @@ public class PontoCarregamentoController {
         @ApiResponse(responseCode = "200", description = "Lista de pontos de carregamento retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<PontoCarregamento> getPontosCarregamentoByReservavel(@PathVariable char reservavel) {
-        return pontoCarregamentoService.findAllByReservavel(reservavel);
+    public PagedModel<EntityModel<PontoCarregamento>> getPontosCarregamentoByReservavel(@PathVariable char reservavel,
+    @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        Page<PontoCarregamento> page =  pontoCarregamentoService.findAllByReservavel(reservavel, pageable);
+        return pageAssembler.toModel(page, pontoCarregamento -> EntityModel.of(pontoCarregamento));
     }
 
     @PostMapping

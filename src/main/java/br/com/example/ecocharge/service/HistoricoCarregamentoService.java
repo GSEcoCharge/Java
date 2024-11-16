@@ -1,8 +1,12 @@
 package br.com.example.ecocharge.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,8 +20,27 @@ public class HistoricoCarregamentoService {
     @Autowired
     private HistoricoCarregamentoRepository historicoCarregamentoRepository;
 
-    public List<HistoricoCarregamento> findAll() {
-        return historicoCarregamentoRepository.findAll();
+    public Page<HistoricoCarregamento> findAll(Pageable pageable) {
+        return historicoCarregamentoRepository.findAll(pageable);
+    }
+
+    public Page<HistoricoCarregamento> findAllByDataAndConsumoAndEmissoes(LocalDate data, BigDecimal consumo,
+            BigDecimal emissoes, Pageable pageable) {
+                return historicoCarregamentoRepository.findAllByDataAndConsumoAndEmissoes(data, consumo, emissoes, pageable);
+    }
+
+    public Page<HistoricoCarregamento> findAllByConsumoAndEmissoes(BigDecimal consumo, BigDecimal emissoes,
+            Pageable pageable) {
+                return historicoCarregamentoRepository.findAllByConsumoAndEmissoes(consumo, emissoes, pageable);
+    }
+
+    public Page<HistoricoCarregamento> findAllByEmissoesAndData(BigDecimal emissoes, LocalDate data,
+            Pageable pageable) {
+                return historicoCarregamentoRepository.findAllByEmissoesAndData(emissoes, data, pageable);
+    }
+
+    public Page<HistoricoCarregamento> findAllByDataAndConsumo(LocalDate data, BigDecimal consumo, Pageable pageable) {
+                return historicoCarregamentoRepository.findAllByDataAndConsumo(data, consumo, pageable);
     }
 
     public HistoricoCarregamento findById(Long id) {

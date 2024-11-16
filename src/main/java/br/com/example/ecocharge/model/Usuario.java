@@ -1,6 +1,6 @@
 package br.com.example.ecocharge.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,13 +41,13 @@ public class Usuario {
     private String perfil;
 
     @Column(name = "DATA_CRIACAO")
-    private Date criacao;
+    private LocalDateTime criacao;
     
     @Column(name = "ULTIMA_LOCALIZACAO")
     private String localizacao;
 
     @PrePersist
     protected void onCreate() {
-        criacao = new Date();
+        criacao = LocalDateTime.now();
     }
 }

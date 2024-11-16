@@ -50,8 +50,8 @@ public class UsuarioService {
     }
 
     public Usuario create(Usuario usuario) {
-        String script = chatService.sentToAi(usuario);
-        emailService.sendEmail(usuario.getEmail(), "Bem-vindo ao EcoCharge!", script);
+        // String script = chatService.sentToAi(usuario);
+        // emailService.sendEmail(usuario.getEmail(), "Bem-vindo ao EcoCharge!", script);
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }

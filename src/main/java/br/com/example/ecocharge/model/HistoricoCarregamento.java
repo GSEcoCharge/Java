@@ -1,7 +1,7 @@
 package br.com.example.ecocharge.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +39,7 @@ public class HistoricoCarregamento {
     private PontoCarregamento ponto;
 
     @Column(name = "DATA_CARREGAMENTO")
-    private Date data;
+    private LocalDate data;
 
     @Column(name = "ENERGIA_CONSUMIDA")
     private BigDecimal consumo;

@@ -2,7 +2,14 @@ package br.com.example.ecocharge.controller;
 
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.example.ecocharge.model.Veiculo;
 import br.com.example.ecocharge.service.VeiculoService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,14 +36,39 @@ public class VeiculoController {
     @Autowired
     private VeiculoService veiculoService;
 
+    @Autowired
+    PagedResourcesAssembler<Veiculo> pageAssembler;
+
     @Operation(summary = "Listar todos os veículos", description = "Endpoint para listar todos os veículos")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Veículos listados com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping
-    public List<Veiculo> index() {
-        return veiculoService.findAll();
+    public PagedModel<EntityModel<Veiculo>> index(
+        @RequestParam(required = false) String modelo,
+        @RequestParam(required = false) String marca,
+        @RequestParam(required = false) Integer ano,
+        @RequestParam(required = false) Integer autonomia,
+        @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        
+        Page<Veiculo> page = null;
+
+        if(modelo != null && marca != null && ano != null && autonomia != null) {
+            page = veiculoService.findAllByModeloAndMarcaAndAnoAndAutonomia(modelo, marca, ano, autonomia, pageable);
+        } else if(marca != null && modelo != null) {
+            page = veiculoService.findAllByMarcaAndModelo(marca, modelo, pageable);
+        } else if(ano != null && autonomia != null) {
+            page = veiculoService.findAllByAnoAndAutonomia(ano, autonomia, pageable);
+        } else if(autonomia != null && marca != null) {
+            page = veiculoService.findAllByAutonomiaAndMarca(autonomia, marca, pageable);
+        } else if(autonomia != null && ano != null) {
+            page = veiculoService.findAllByAutonomiaAndAno(autonomia, ano, pageable);
+        } else{
+            page = veiculoService.findAll(pageable);
+        }
+        
+        return pageAssembler.toModel(page);
     }
 
     @Operation(summary = "Buscar veículos por autonomia", description = "Endpoint para buscar veículos por autonomia")

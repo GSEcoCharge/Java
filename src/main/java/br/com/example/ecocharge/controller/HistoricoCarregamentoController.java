@@ -1,9 +1,28 @@
 package br.com.example.ecocharge.controller;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import br.com.example.ecocharge.model.HistoricoCarregamento;
 import br.com.example.ecocharge.service.HistoricoCarregamentoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,14 +38,35 @@ public class HistoricoCarregamentoController {
     @Autowired
     private HistoricoCarregamentoService historicoCarregamentoService;
 
+    @Autowired
+    PagedResourcesAssembler<HistoricoCarregamento> pagedResourcesAssembler;
+
     @GetMapping
     @Operation(summary = "Lista todos os históricos de carregamento.", description = "Endpoint que retorna uma lista de objetos do tipo histórico de carregamento")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de históricos de carregamento retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<HistoricoCarregamento> getAllHistoricosCarregamento() {
-        return historicoCarregamentoService.findAll();
+    public PagedModel<EntityModel<HistoricoCarregamento>> index(
+        @RequestParam(required = false) LocalDate data,
+        @RequestParam(required = false) BigDecimal consumo,
+        @RequestParam(required = false) BigDecimal emissoes,
+        @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable
+    ) {
+        Page<HistoricoCarregamento> page = null;
+
+        if (data != null && consumo != null && emissoes != null) {
+            page = historicoCarregamentoService.findAllByDataAndConsumoAndEmissoes(data, consumo, emissoes, pageable);
+        } else if (consumo != null && emissoes != null) {
+            page = historicoCarregamentoService.findAllByConsumoAndEmissoes(consumo, emissoes, pageable);
+        } else if (emissoes != null && data != null) {
+            page = historicoCarregamentoService.findAllByEmissoesAndData(emissoes, data, pageable);
+        } else if (data != null && consumo != null) {
+            page = historicoCarregamentoService.findAllByDataAndConsumo(data, consumo, pageable);
+        } else {
+            page = historicoCarregamentoService.findAll(pageable);
+        }
+        return pagedResourcesAssembler.toModel(page);
     }
 
     @GetMapping("/{id}")

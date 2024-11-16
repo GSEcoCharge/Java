@@ -1,7 +1,10 @@
 package br.com.example.ecocharge.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,8 +18,20 @@ public class AvaliacaoService {
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
 
-    public List<Avaliacao> findAll() {
-        return avaliacaoRepository.findAll();
+    public Page<Avaliacao> findAll(Pageable pageable) {
+        return avaliacaoRepository.findAll(pageable);
+    }
+
+    public Page<Avaliacao> findAllByNotaAndData(Integer nota, LocalDate data, Pageable pageable) {
+        return avaliacaoRepository.findAllByNotaAndData(nota, data, pageable);
+    }
+
+    public Page<Avaliacao> findAllByNota(Integer nota, Pageable pageable) {
+        return avaliacaoRepository.findAllByNota(nota, pageable);
+    }
+
+    public Page<Avaliacao> findAllByData(LocalDate data, Pageable pageable) {
+        return avaliacaoRepository.findAllByData(data, pageable);
     }
 
     public List<Avaliacao> findAllByUsuarioId(Long id) {

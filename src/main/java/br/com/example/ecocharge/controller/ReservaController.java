@@ -5,7 +5,14 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +39,32 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
+    @Autowired
+    PagedResourcesAssembler<Reserva> pagedResourcesAssembler;
+
     @GetMapping
     @Operation(summary = "Lista todas as reservas cadastradas no sistema.", description = "Endpoint que retorna uma lista de objetos do tipo reserva")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<Reserva> index() {
-        return reservaService.findAll();
+    public PagedModel<EntityModel<Reserva>> index(
+            @PathVariable(required = false) String status,
+            @PathVariable(required = false) String data,
+            @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        
+            Page<Reserva> page = null;
+        
+            if (status != null && data != null) {
+                page = reservaService.findAllByStatusAndData(status, data, pageable);
+            } else if (status != null) {
+                page = reservaService.findAllByStatus(status, pageable);
+            } else if (data != null) {
+                page = reservaService.findAllByData(data, pageable);
+            } else {
+                page = reservaService.findAll(pageable);             
+            }
+            return pagedResourcesAssembler.toModel(page);
     }
 
     @GetMapping("/{id}")
