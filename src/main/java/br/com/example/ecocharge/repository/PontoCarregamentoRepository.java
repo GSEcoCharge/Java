@@ -22,12 +22,22 @@ public interface PontoCarregamentoRepository extends JpaRepository<PontoCarregam
     @Query("SELECT p FROM PontoCarregamento p WHERE p.reservavel = :reservavel")
     Page<PontoCarregamento> findAllByReservavel(@Param("reservavel") char reservavel, Pageable pageable);
 
-    @Query("SELECT p FROM PontoCarregamento p WHERE p.conector = :tipoConector AND p.carregamento = :velocidadeCarregamento AND p.reservavel = :reservavel")
-    Page<PontoCarregamento> findAllByTipoConectorAndPotenciaAndReservavel(String tipoConector, Integer velocidadeCarregamento,
-            Character reservavel, Pageable pageable);
+    @Query("SELECT p FROM PontoCarregamento p WHERE p.carregamento = :velocidadeCarregamento AND p.conector = :tipoConector AND p.reservavel = :reservavel AND p.disponibilidade = :disponibilidade")
+    Page<PontoCarregamento> findAllByPotenciaAndTipoConectorAndReservavelAndDisponivel(Integer velocidadeCarregamento,String tipoConector, Character reservavel, String disponibilidade, Pageable pageable);
 
     @Query("SELECT p FROM PontoCarregamento p WHERE p.conector = :tipoConector AND p.reservavel = :reservavel")
-    Page<PontoCarregamento> findAllByTipoConectorPotenciaAndReservavel(String tipoConector, Character reservavel,
-            Pageable pageable);
+    Page<PontoCarregamento> findAllByTipoConectorPotenciaAndReservavel(String tipoConector, Character reservavel, Pageable pageable);
+
+    @Query("SELECT p FROM PontoCarregamento p WHERE p.disponibilidade = :disponibilidade AND p.reservavel = :reservavel")
+    Page<PontoCarregamento> findAllByDisponivelAndReservavel(String disponibilidade, Character reservavel, Pageable pageable);
+
+    @Query("SELECT p FROM PontoCarregamento p WHERE p.conector = :tipoConector AND p.carregamento = :velocidadeCarregamento")
+    Page<PontoCarregamento> findAllByTipoConectorAndPotencia(String tipoConector, Integer velocidadeCarregamento, Pageable pageable);
+
+    @Query("SELECT p FROM PontoCarregamento p WHERE p.conector = :tipoConector AND p.reservavel = :reservavel AND p.disponibilidade = :disponibilidade")
+    Page<PontoCarregamento> findAllByTipoConectorAndReservavelAndDisponivel(String tipoConector, Character reservavel, String disponibilidade, Pageable pageable);
+
+    @Query("SELECT p FROM PontoCarregamento p WHERE p.carregamento = :velocidadeCarregamento AND p.reservavel = :reservavel AND p.disponibilidade = :disponibilidade")
+    Page<PontoCarregamento> findAllByPotenciaAndReservavelAndDisponivel(Integer velocidadeCarregamento, Character reservavel, String disponibilidade, Pageable pageable);
     
 }

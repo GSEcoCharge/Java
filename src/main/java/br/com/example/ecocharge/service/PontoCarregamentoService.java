@@ -1,7 +1,5 @@
 package br.com.example.ecocharge.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +24,27 @@ public class PontoCarregamentoService {
         return pontoCarregamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrado o ponto de carregamento com o id: " + id));
     }
 
-    public Page<PontoCarregamento> findAllByTipoConectorAndPotenciaAndReservavel(String tipoConector,
-            Integer velocidadeCarregamento, Character reservavel, Pageable pageable) {
-                return pontoCarregamentoRepository.findAllByTipoConectorAndPotenciaAndReservavel(tipoConector, velocidadeCarregamento, reservavel, pageable);
+    public Page<PontoCarregamento> findAllByPotenciaAndTipoConectorAndReservavelAndDisponivel(Integer velocidadeCarregamento,String tipoConector, Character reservavel, String disponibilidade, Pageable pageable) {
+                return pontoCarregamentoRepository.findAllByPotenciaAndTipoConectorAndReservavelAndDisponivel(velocidadeCarregamento, tipoConector, reservavel, disponibilidade, pageable);
+    }
+    public Page<PontoCarregamento> findAllByPotenciaAndReservavelAndDisponivel(Integer velocidadeCarregamento,
+            Character reservavel, String disponibilidade, Pageable pageable) {
+                return pontoCarregamentoRepository.findAllByPotenciaAndReservavelAndDisponivel(velocidadeCarregamento, reservavel, disponibilidade, pageable);
+    }
+
+	public Page<PontoCarregamento> findAllByTipoConectorAndReservavelAndDisponivel(String tipoConector,
+			Character reservavel, String disponibilidade, Pageable pageable) {
+                return pontoCarregamentoRepository.findAllByTipoConectorAndReservavelAndDisponivel(tipoConector, reservavel, disponibilidade, pageable);
+	}
+
+	public Page<PontoCarregamento> findAllByTipoConectorAndPotencia(String tipoConector, Integer velocidadeCarregamento,
+			Pageable pageable) {
+                return pontoCarregamentoRepository.findAllByTipoConectorAndPotencia(tipoConector, velocidadeCarregamento, pageable);
+	}
+
+    public Page<PontoCarregamento> findAllByDisponivelAndReservavel(String disponibilidade, Character reservavel,
+            Pageable pageable) {
+                return pontoCarregamentoRepository.findAllByDisponivelAndReservavel(disponibilidade, reservavel, pageable);
     }
 
     public Page<PontoCarregamento> findAllByTipoConectorAndReservavel(String tipoConector, Character reservavel,

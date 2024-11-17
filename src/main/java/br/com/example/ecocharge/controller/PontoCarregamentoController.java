@@ -52,10 +52,18 @@ public class PontoCarregamentoController {
 
         Page<PontoCarregamento> page = null;
         
-        if( velocidadeCarregamento != null && tipoConector != null && reservavel != null) {
-            page = pontoCarregamentoService.findAllByTipoConectorAndPotenciaAndReservavel(tipoConector, velocidadeCarregamento, reservavel, pageable);
+        if( velocidadeCarregamento != null && tipoConector != null && reservavel != null && disponibilidade != null) {
+            page = pontoCarregamentoService.findAllByPotenciaAndTipoConectorAndReservavelAndDisponivel(velocidadeCarregamento, tipoConector, reservavel, disponibilidade, pageable);
+        }  else if (velocidadeCarregamento != null && reservavel != null && disponibilidade != null) {
+            page = pontoCarregamentoService.findAllByPotenciaAndReservavelAndDisponivel(velocidadeCarregamento, reservavel, disponibilidade, pageable);
+        }  else if (tipoConector != null && reservavel != null && disponibilidade != null) {
+            page = pontoCarregamentoService.findAllByTipoConectorAndReservavelAndDisponivel(tipoConector, reservavel, disponibilidade, pageable);
+        }  else if (tipoConector != null && velocidadeCarregamento != null) {
+            page = pontoCarregamentoService.findAllByTipoConectorAndPotencia(tipoConector, velocidadeCarregamento, pageable);
         }  else if (tipoConector != null && reservavel != null) {
             page = pontoCarregamentoService.findAllByTipoConectorAndReservavel(tipoConector, reservavel, pageable);
+        } else if (disponibilidade != null && reservavel != null) {
+            page = pontoCarregamentoService.findAllByDisponivelAndReservavel(disponibilidade, reservavel, pageable);
         } else if (disponibilidade != null) {
             page = pontoCarregamentoService.findAllByDisponibilidade(disponibilidade, pageable);
         } else if (tipoConector != null) {
@@ -68,7 +76,7 @@ public class PontoCarregamentoController {
             page = pontoCarregamentoService.findAll(pageable);
         }
     
-        return pageAssembler.toModel(page, pontoCarregamento -> EntityModel.of(pontoCarregamento));
+        return pageAssembler.toModel(page);
     }
 
     @GetMapping("/{id}")
