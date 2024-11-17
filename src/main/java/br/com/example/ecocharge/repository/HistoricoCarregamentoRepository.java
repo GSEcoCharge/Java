@@ -13,7 +13,7 @@ import br.com.example.ecocharge.model.HistoricoCarregamento;
 
 public interface HistoricoCarregamentoRepository extends JpaRepository<HistoricoCarregamento, Long> {
     @Query("SELECT h FROM HistoricoCarregamento h WHERE h.usuario = :id")
-    List<HistoricoCarregamento> findAllByUsuarioId(Long id);
+    Page<HistoricoCarregamento> findAllByUsuarioId(Long id, Pageable pageable);
 
     @Query("SELECT h FROM HistoricoCarregamento h WHERE h.ponto = :id")
     List<HistoricoCarregamento> findAllByPontoId(Long id);
@@ -40,4 +40,16 @@ public interface HistoricoCarregamentoRepository extends JpaRepository<Historico
     @Query("SELECT h FROM HistoricoCarregamento h WHERE h.data = :data AND h.consumo = :consumo")
     Page<HistoricoCarregamento> findAllByDataAndConsumo(LocalDate data, BigDecimal consumo, Pageable pageable);
 
+    @Query("SELECT h FROM HistoricoCarregamento h WHERE h.usuario.id = :id and h.data = :data AND h.consumo = :consumo AND h.emissoes = :emissoes")
+    Page<HistoricoCarregamento> findAllByUsuarioWithDataAndConsumoAndEmissoes(Long id, LocalDate data, BigDecimal consumo,
+            BigDecimal emissoes, Pageable pageable);
+
+    @Query("SELECT h FROM HistoricoCarregamento h WHERE h.usuario.id = :id and h.consumo = :consumo AND h.emissoes = :emissoes")
+    Page<HistoricoCarregamento> findAllByUsuarioWithConsumoAndEmissoes(Long id, BigDecimal consumo, BigDecimal emissoes, Pageable pageable);
+
+    @Query("SELECT h FROM HistoricoCarregamento h WHERE h.usuario.id = :id and h.emissoes = :emissoes AND h.data = :data")
+    Page<HistoricoCarregamento> findAllByUsuarioWithEmissoesAndData(Long id, BigDecimal emissoes, LocalDate data, Pageable pageable);
+
+    @Query("SELECT h FROM HistoricoCarregamento h WHERE h.usuario.id = :id and h.data = :data AND h.consumo = :consumo")
+    Page<HistoricoCarregamento> findAllByUsuarioWithDataAndConsumo(Long id, LocalDate data, BigDecimal consumo, Pageable pageable);
 }

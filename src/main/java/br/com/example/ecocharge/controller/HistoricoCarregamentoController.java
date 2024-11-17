@@ -8,6 +8,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -76,25 +77,9 @@ public class HistoricoCarregamentoController {
         @ApiResponse(responseCode = "404", description = "Histórico de carregamento não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<HistoricoCarregamento> getHistoricoCarregamentoById(@RequestParam(required = false) LocalDate data,
-        @RequestParam(required = false) BigDecimal consumo,
-        @RequestParam(required = false) BigDecimal emissoes,
-        @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable
-    ) {
-        Page<HistoricoCarregamento> page = null;
-
-        if (data != null && consumo != null && emissoes != null) {
-            page = historicoCarregamentoService.findAllByDataAndConsumoAndEmissoes(data, consumo, emissoes, pageable);
-        } else if (consumo != null && emissoes != null) {
-            page = historicoCarregamentoService.findAllByConsumoAndEmissoes(consumo, emissoes, pageable);
-        } else if (emissoes != null && data != null) {
-            page = historicoCarregamentoService.findAllByEmissoesAndData(emissoes, data, pageable);
-        } else if (data != null && consumo != null) {
-            page = historicoCarregamentoService.findAllByDataAndConsumo(data, consumo, pageable);
-        } else {
-            page = historicoCarregamentoService.findAll(pageable);
-        }
-        return pagedResourcesAssembler.toModel(page);
+    public ResponseEntity<HistoricoCarregamento> getHistoricoCarregamentoById(@PathVariable Long id) {
+        HistoricoCarregamento historicoCarregamento = historicoCarregamentoService.findById(id);
+        return ResponseEntity.ok(historicoCarregamento);
     }
 
     @GetMapping("/usuario/{usuarioId}")
@@ -104,9 +89,28 @@ public class HistoricoCarregamentoController {
         @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<HistoricoCarregamento> getHistoricosCarregamentoByUsuarioId(@PathVariable Long usuarioId) {
-        return historicoCarregamentoService.findAllByUsuarioId(usuarioId);
-    }
+    public PagedModel<EntityModel<HistoricoCarregamento>> getHistoricosCarregamentoByUsuarioId(
+        @RequestParam(required = true) Long id,
+        @RequestParam(required = false) LocalDate data,
+        @RequestParam(required = false) BigDecimal consumo,
+        @RequestParam(required = false) BigDecimal emissoes,
+        @ParameterObject @PageableDefault(size = 10, sort = "data", direction = Direction.DESC) Pageable pageable
+    ) {
+        Page<HistoricoCarregamento> page = null;
+
+        if (data != null && consumo != null && emissoes != null) {
+            page = historicoCarregamentoService.findAllByUsuarioWithDataAndConsumoAndEmissoes(id, data, consumo, emissoes, pageable);
+        } else if (consumo != null && emissoes != null) {
+            page = historicoCarregamentoService.findAllByUsuarioWithConsumoAndEmissoes(id, consumo, emissoes, pageable);
+        } else if (emissoes != null && data != null) {
+            page = historicoCarregamentoService.findAllByUsuarioWithEmissoesAndData(id, emissoes, data, pageable);
+        } else if (data != null && consumo != null) {
+            page = historicoCarregamentoService.findAllByUsuarioWithDataAndConsumo(id, data, consumo, pageable);
+        } else {
+            page = historicoCarregamentoService.findAllByUsuarioId(id, pageable);
+        }
+        return pagedResourcesAssembler.toModel(page);
+}
 
     @GetMapping("/ponto/{pontoId}")
     @Operation(summary = "Lista todos os históricos de carregamento por ponto.", description = "Endpoint que retorna uma lista de históricos de carregamento para um ponto específico")
