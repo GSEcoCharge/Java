@@ -76,9 +76,25 @@ public class HistoricoCarregamentoController {
         @ApiResponse(responseCode = "404", description = "Histórico de carregamento não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<HistoricoCarregamento> getHistoricoCarregamentoById(@PathVariable Long id) {
-        HistoricoCarregamento historicoCarregamento = historicoCarregamentoService.findById(id);
-        return ResponseEntity.ok(historicoCarregamento);
+    public ResponseEntity<HistoricoCarregamento> getHistoricoCarregamentoById(@RequestParam(required = false) LocalDate data,
+        @RequestParam(required = false) BigDecimal consumo,
+        @RequestParam(required = false) BigDecimal emissoes,
+        @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable
+    ) {
+        Page<HistoricoCarregamento> page = null;
+
+        if (data != null && consumo != null && emissoes != null) {
+            page = historicoCarregamentoService.findAllByDataAndConsumoAndEmissoes(data, consumo, emissoes, pageable);
+        } else if (consumo != null && emissoes != null) {
+            page = historicoCarregamentoService.findAllByConsumoAndEmissoes(consumo, emissoes, pageable);
+        } else if (emissoes != null && data != null) {
+            page = historicoCarregamentoService.findAllByEmissoesAndData(emissoes, data, pageable);
+        } else if (data != null && consumo != null) {
+            page = historicoCarregamentoService.findAllByDataAndConsumo(data, consumo, pageable);
+        } else {
+            page = historicoCarregamentoService.findAll(pageable);
+        }
+        return pagedResourcesAssembler.toModel(page);
     }
 
     @GetMapping("/usuario/{usuarioId}")

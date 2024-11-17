@@ -1,7 +1,7 @@
 package br.com.example.ecocharge.service;
 
 import java.time.LocalDate;
-import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,14 +34,36 @@ public class AvaliacaoService {
         return avaliacaoRepository.findAllByData(data, pageable);
     }
 
-    public List<Avaliacao> findAllByUsuarioId(Long id) {
-        return avaliacaoRepository.findAllByUsuarioId(id);
+    public Page<Avaliacao> findAllByUsuarioId(Long id,Pageable pageable) {
+        return avaliacaoRepository.findAllByUsuarioId(id, pageable);
     }
 
-    public List<Avaliacao> findAllByPostoId(Long id) {
-        return avaliacaoRepository.findAllByPostoId(id);
+    public Page<Avaliacao> findAllByPostoId(Long id, Pageable pageable) {
+        return avaliacaoRepository.findAllByPostoId(id, pageable);
+    }
+    public Page<Avaliacao> findAllByIdUsuarioWithNotaAndData(Long id, Integer nota, LocalDate data, Pageable pageable) {
+        return avaliacaoRepository.findAllByIdUsuarioWithNotaAndData(id, nota, data, pageable);
     }
 
+    public Page<Avaliacao> findAllByIdUsuarioWithNota(Long id, Integer nota, Pageable pageable) {
+        return avaliacaoRepository.findAllByIdUsuarioWithNota(id, nota, pageable);
+    }
+
+    public Page<Avaliacao> findAllByIdUsuarioWithData(Long id, LocalDate data, Pageable pageable) {
+        return avaliacaoRepository.findAllByIdUsuarioWithData(id, data, pageable);
+    }
+
+    public Page<Avaliacao> findAllByIdPostoWithNotaAndData(Long id, Integer nota, LocalDate data, Pageable pageable) {
+        return avaliacaoRepository.findAllByIdUsuarioWithNotaAndData(id, nota, data, pageable);
+    }
+
+    public Page<Avaliacao> findAllByIdPostoWithNota(Long id, Integer nota, Pageable pageable) {
+        return avaliacaoRepository.findAllByIdUsuarioWithNota(id, nota, pageable);
+    }
+
+    public Page<Avaliacao> findAllByIdPostoWithData(Long id, LocalDate data, Pageable pageable) {
+        return avaliacaoRepository.findAllByIdUsuarioWithData(id, data, pageable);
+    }
     public Avaliacao findById(Long id) {
         return avaliacaoRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrada a avaliação com o id: " + id));
     }

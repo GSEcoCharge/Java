@@ -4,12 +4,12 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -55,11 +55,11 @@ public class AvaliacaoController {
     public PagedModel<EntityModel<Avaliacao>> index(
         @RequestParam(required = false) Integer nota,
         @RequestParam(required = false) LocalDate data,
-        @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable
+        @ParameterObject @PageableDefault(size = 10, sort = "data", direction = Direction.DESC) Pageable pageable
     ) {
         Page<Avaliacao> page = null;
 
-        if (nota != 0 && data != null) {
+        if (nota != null && data != null) {
             page = avaliacaoService.findAllByNotaAndData(nota, data, pageable);
         } else if (nota != null) {
             page = avaliacaoService.findAllByNota(nota, pageable);
@@ -71,24 +71,55 @@ public class AvaliacaoController {
         return pagedResourcesAssembler.toModel(page);        
     }
 
-    @GetMapping("/usuario/{id}")
+    @GetMapping("/usuario")
     @Operation(summary = "Lista todas as avaliações de um usuário específico.", description = "Endpoint que retorna uma lista de objetos do tipo avaliação para um usuário específico")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de avaliações retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<Avaliacao> getAvaliacoesByUsuario(@PathVariable Long id) {
-        return avaliacaoService.findAllByUsuarioId(id);
-    }
+    public PagedModel<EntityModel<Avaliacao>> getAvaliacoesByUsuario(
+        @RequestParam(required = true) Long id,
+        @RequestParam(required = false) Integer nota,
+        @RequestParam(required = false) LocalDate data,
+        @ParameterObject @PageableDefault(size = 10, sort = "data", direction = Direction.DESC) Pageable pageable
+    ) {
+        Page<Avaliacao> page = null;
 
-    @GetMapping("/posto/{id}")
+        if (nota != null && data != null) {
+            page = avaliacaoService.findAllByIdUsuarioWithNotaAndData(id, nota, data, pageable);
+        } else if (nota != null) {
+            page = avaliacaoService.findAllByIdUsuarioWithNota(id, nota, pageable);
+        } else if (data != null) {
+            page = avaliacaoService.findAllByIdUsuarioWithData(id, data, pageable);
+        } else {
+            page = avaliacaoService.findAllByUsuarioId(id, pageable);
+        }
+        return pagedResourcesAssembler.toModel(page);
+}
+
+    @GetMapping("/posto")
     @Operation(summary = "Lista todas as avaliações de um posto específico.", description = "Endpoint que retorna uma lista de objetos do tipo avaliação para um posto específico")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de avaliações retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<Avaliacao> getAvaliacoesByPosto(@PathVariable Long id) {
-        return avaliacaoService.findAllByPostoId(id);
+    public PagedModel<EntityModel<Avaliacao>> getAvaliacoesByPosto(
+        @RequestParam(required = true) Long id,
+        @RequestParam(required = false) Integer nota,
+        @RequestParam(required = false) LocalDate data,
+        @ParameterObject @PageableDefault(size = 10, sort = "data", direction = Direction.DESC) Pageable pageable
+        ) {
+            Page<Avaliacao> page = null;
+            if (nota != null && data != null) {
+                page = avaliacaoService.findAllByIdPostoWithNotaAndData(id, nota, data, pageable);
+            } else if (nota != null) {
+                page = avaliacaoService.findAllByIdPostoWithNota(id, nota, pageable);
+            } else if (data != null) {
+                page = avaliacaoService.findAllByIdPostoWithData(id, data, pageable);
+            } else {
+                page = avaliacaoService.findAllByPostoId(id, pageable);
+            }
+            return pagedResourcesAssembler.toModel(page);
     } 
 
     @GetMapping("/{id}")
