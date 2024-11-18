@@ -1,9 +1,19 @@
 package br.com.example.ecocharge.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.example.ecocharge.dto.PontoParadaResponse;
 import br.com.example.ecocharge.model.PontoParada;
 import br.com.example.ecocharge.service.PontoParadaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,20 +35,9 @@ public class PontoParadaController {
         @ApiResponse(responseCode = "200", description = "Lista de pontos de parada retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<PontoParada> index() {
-        return pontoParadaService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Retorna um ponto de parada específico cadastrado no sistema.", description = "Endpoint que retorna um objeto do tipo ponto de parada com um id informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Ponto de parada encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Ponto de parada não encontrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public ResponseEntity<PontoParada> getPontoParadaById(@PathVariable Long id) {
-        PontoParada pontoParada = pontoParadaService.findById(id);
-        return ResponseEntity.ok(pontoParada);
+    public List<PontoParadaResponse> index() {
+        List<PontoParada> pontos = pontoParadaService.findAll();
+        return pontos.stream().map(PontoParadaResponse::from).toList();
     }
 
     @PostMapping
@@ -50,6 +49,18 @@ public class PontoParadaController {
     })
     public PontoParada createPontoParada(@RequestBody PontoParada pontoParada) {
         return pontoParadaService.create(pontoParada);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Retorna um ponto de parada específico cadastrado no sistema.", description = "Endpoint que retorna um objeto do tipo ponto de parada com um id informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Ponto de parada encontrado com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Ponto de parada não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public ResponseEntity<PontoParadaResponse> getPontoParadaById(@PathVariable Long id) {
+        PontoParada pontoParada = pontoParadaService.findById(id);
+        return ResponseEntity.ok(PontoParadaResponse.from(pontoParada));
     }
 
     @PutMapping("/{id}")

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.example.ecocharge.dto.UsuarioResponse;
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,24 +42,9 @@ public class UsuarioController {
         @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<Usuario> index() {
-        return usuarioService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Retorna um usuário específico cadastrado no sistema.", description = "Endpoint que retorna um objeto do tipo usuário com um id informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Long id) {
-        try {
-            Usuario usuario = usuarioService.findById(id);
-            return ResponseEntity.ok(usuario);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public List<UsuarioResponse> index() {
+        List<Usuario> usuarios = usuarioService.findAll();
+        return usuarios.stream().map(UsuarioResponse::from).toList();
     }
 
     @PostMapping
@@ -71,6 +57,33 @@ public class UsuarioController {
     })
     public Usuario createUsuario(@RequestBody Usuario usuario) {
         return usuarioService.create(usuario);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Retorna um usuário específico cadastrado no sistema.", description = "Endpoint que retorna um objeto do tipo usuário com um id informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public ResponseEntity<UsuarioResponse> getUsuarioById(@PathVariable Long id) {
+        try {
+            Usuario usuario = usuarioService.findById(id);
+            return ResponseEntity.ok(UsuarioResponse.from(usuario));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("perfil/{id}")
+    @Operation(summary = "Retorna uma imagem de perfil pelo ID do usuário.", description = "Endpoint que retorna uma imagem de perfil com um ID de usuário informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Imagem de perfil retornada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Imagem de perfil não encontrada"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public ResponseEntity<Resource> getImageById(@PathVariable Long id) throws IOException {
+        return usuarioService.getImageById(id);
     }
 
     @PutMapping("/{id}")
@@ -119,16 +132,5 @@ public class UsuarioController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    @GetMapping("perfil/{id}")
-    @Operation(summary = "Retorna uma imagem de perfil pelo ID do usuário.", description = "Endpoint que retorna uma imagem de perfil com um ID de usuário informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Imagem de perfil retornada com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Imagem de perfil não encontrada"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public ResponseEntity<Resource> getImageById(@PathVariable Long id) throws IOException {
-        return usuarioService.getImageById(id);
     }
 }

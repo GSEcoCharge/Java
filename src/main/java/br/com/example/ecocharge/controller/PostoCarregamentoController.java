@@ -34,19 +34,7 @@ public class PostoCarregamentoController {
     public List<PostoCarregamento> index() {
         return postoCarregamentoService.findAll();
     }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Retorna um posto de carregamento específico cadastrado no sistema.", description = "Endpoint que retorna um objeto do tipo posto de carregamento com um id informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Posto de carregamento encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Posto de carregamento não encontrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public ResponseEntity<PostoCarregamento> getPostoById(@PathVariable Long id) {
-        PostoCarregamento posto = postoCarregamentoService.findById(id);
-        return ResponseEntity.ok(posto);
-    }
-
+    
     @PostMapping
     @ResponseStatus(CREATED)
 
@@ -58,6 +46,18 @@ public class PostoCarregamentoController {
     })
     public PostoCarregamento createPosto(@RequestBody PostoCarregamento posto) {
         return postoCarregamentoService.create(posto);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Retorna um posto de carregamento específico cadastrado no sistema.", description = "Endpoint que retorna um objeto do tipo posto de carregamento com um id informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Posto de carregamento encontrado com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Posto de carregamento não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public ResponseEntity<PostoCarregamento> getPostoById(@PathVariable Long id) {
+        PostoCarregamento posto = postoCarregamentoService.findById(id);
+        return ResponseEntity.ok(posto);
     }
 
     @PutMapping("/{id}")

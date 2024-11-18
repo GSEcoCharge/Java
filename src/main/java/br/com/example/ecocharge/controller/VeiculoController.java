@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.example.ecocharge.dto.VeiculoResponse;
 import br.com.example.ecocharge.model.Veiculo;
 import br.com.example.ecocharge.service.VeiculoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +38,7 @@ public class VeiculoController {
     private VeiculoService veiculoService;
 
     @Autowired
-    PagedResourcesAssembler<Veiculo> pageAssembler;
+    PagedResourcesAssembler<VeiculoResponse> pageAssembler;
 
     @Operation(summary = "Listar todos os veículos", description = "Endpoint para listar todos os veículos")
     @ApiResponses(value = {
@@ -45,7 +46,7 @@ public class VeiculoController {
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping
-    public PagedModel<EntityModel<Veiculo>> index(
+    public PagedModel<EntityModel<VeiculoResponse>> index(
         @RequestParam(required = false) String modelo,
         @RequestParam(required = false) String marca,
         @RequestParam(required = false) Integer ano,
@@ -68,41 +69,7 @@ public class VeiculoController {
             page = veiculoService.findAll(pageable);
         }
         
-        return pageAssembler.toModel(page);
-    }
-
-    @Operation(summary = "Buscar veículos por autonomia", description = "Endpoint para buscar veículos por autonomia")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Veículos encontrados com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Veículos não encontrados"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    @GetMapping("/autonomia/{autonomia}")
-    public List<Veiculo> getVeiculosByAutonomia(@PathVariable int autonomia) {
-        return veiculoService.findAllByAutonomia(autonomia);
-    }
-
-    @Operation(summary = "Buscar veículos por conector", description = "Endpoint para buscar veículos por conector")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Veículos encontrados com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Veículos não encontrados"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    @GetMapping("/conector/{conector}")
-    public List<Veiculo> getVeiculosByConector(@PathVariable String conector) {
-        return veiculoService.findAllByConector(conector);
-    }    
-
-    @Operation(summary = "Buscar veículo por ID", description = "Endpoint para buscar um veículo por ID")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Veículo encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Veículo não encontrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    @GetMapping("/{id}")
-    public ResponseEntity<Veiculo> getVeiculoById(@PathVariable Long id) {
-        Veiculo veiculo = veiculoService.findById(id);
-        return ResponseEntity.ok(veiculo);
+        return pageAssembler.toModel(page.map(VeiculoResponse::from));
     }
 
     @Operation(summary = "Criar um novo veículo", description = "Endpoint para criar um novo veículo")
@@ -114,6 +81,54 @@ public class VeiculoController {
     @PostMapping
     public Veiculo createVeiculo(@RequestBody Veiculo veiculo) {
         return veiculoService.create(veiculo);
+    }
+
+    @Operation(summary = "Buscar veículos por autonomia", description = "Endpoint para buscar veículos por autonomia")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Veículos encontrados com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Veículos não encontrados"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    @GetMapping("/autonomia/{autonomia}")
+    public ResponseEntity<List<VeiculoResponse>> getVeiculosByAutonomia(@PathVariable int autonomia) {
+        List<Veiculo> veiculos = veiculoService.findAllByAutonomia(autonomia);
+        if (veiculos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<VeiculoResponse> veiculoResponses = veiculos.stream()
+            .map(VeiculoResponse::from)
+            .toList();
+        return ResponseEntity.ok(veiculoResponses);
+    }
+
+    @Operation(summary = "Buscar veículos por conector", description = "Endpoint para buscar veículos por conector")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Veículos encontrados com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Veículos não encontrados"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    @GetMapping("/conector/{conector}")
+    public ResponseEntity<List<VeiculoResponse>> getVeiculosByConector(@PathVariable String conector) {
+        List<Veiculo> veiculos = veiculoService.findAllByConector(conector);
+        if (veiculos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<VeiculoResponse> veiculoResponses = veiculos.stream()
+            .map(VeiculoResponse::from)
+            .toList();
+        return ResponseEntity.ok(veiculoResponses);
+    }    
+
+    @Operation(summary = "Buscar veículo por ID", description = "Endpoint para buscar um veículo por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Veículo encontrado com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Veículo não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<VeiculoResponse> getVeiculoById(@PathVariable Long id) {
+        Veiculo veiculo = veiculoService.findById(id);
+        return ResponseEntity.ok(VeiculoResponse.from(veiculo));
     }
 
     @Operation(summary = "Atualizar um veículo existente", description = "Endpoint para atualizar um veículo existente")

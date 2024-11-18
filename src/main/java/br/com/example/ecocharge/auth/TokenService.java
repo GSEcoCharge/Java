@@ -41,11 +41,7 @@ public class TokenService {
                 .verify(token)
                 .getSubject();    
         var usuario = usuarioService.findByEmail(email);
-        if (usuario != null) {
-            return usuario;
-        } else {
-            throw new UsernameNotFoundException("Usuário não encontrado");
-        }
+        return usuario.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
 }

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.example.ecocharge.dto.AvaliacaoResponse;
 import br.com.example.ecocharge.model.Avaliacao;
 import br.com.example.ecocharge.service.AvaliacaoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +45,7 @@ public class AvaliacaoController {
     private AvaliacaoService avaliacaoService;
 
     @Autowired
-    PagedResourcesAssembler<Avaliacao> pagedResourcesAssembler;
+    PagedResourcesAssembler<AvaliacaoResponse> pagedResourcesAssembler;
 
     @GetMapping
     @Operation(summary = "Lista todas as avaliações cadastradas no sistema.", description = "Endpoint que retorna uma lista de objetos do tipo avaliação")
@@ -52,7 +53,7 @@ public class AvaliacaoController {
         @ApiResponse(responseCode = "200", description = "Lista de avaliações retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public PagedModel<EntityModel<Avaliacao>> index(
+    public PagedModel<EntityModel<AvaliacaoResponse>> index(
         @RequestParam(required = false) Integer nota,
         @RequestParam(required = false) LocalDate data,
         @ParameterObject @PageableDefault(size = 10, sort = "data", direction = Direction.DESC) Pageable pageable
@@ -68,8 +69,20 @@ public class AvaliacaoController {
         } else {
             page = avaliacaoService.findAll(pageable);
         }
-        return pagedResourcesAssembler.toModel(page);        
+        return pagedResourcesAssembler.toModel(page.map(AvaliacaoResponse::from));        
     }
+
+    @PostMapping
+    @ResponseStatus(CREATED)
+    @Operation(summary = "Cria uma nova avaliação.", description = "Endpoint para criar uma nova avaliação")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Avaliação cadastrada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Erro de validação da avaliação"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public Avaliacao createAvaliacao(@RequestBody Avaliacao avaliacao) {
+        return avaliacaoService.create(avaliacao);
+    } 
 
     @GetMapping("/usuario")
     @Operation(summary = "Lista todas as avaliações de um usuário específico.", description = "Endpoint que retorna uma lista de objetos do tipo avaliação para um usuário específico")
@@ -77,7 +90,7 @@ public class AvaliacaoController {
         @ApiResponse(responseCode = "200", description = "Lista de avaliações retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public PagedModel<EntityModel<Avaliacao>> getAvaliacoesByUsuario(
+    public PagedModel<EntityModel<AvaliacaoResponse>> getAvaliacoesByUsuario(
         @RequestParam(required = true) Long id,
         @RequestParam(required = false) Integer nota,
         @RequestParam(required = false) LocalDate data,
@@ -94,7 +107,7 @@ public class AvaliacaoController {
         } else {
             page = avaliacaoService.findAllByUsuarioId(id, pageable);
         }
-        return pagedResourcesAssembler.toModel(page);
+        return pagedResourcesAssembler.toModel(page.map(AvaliacaoResponse::from));
 }
 
     @GetMapping("/posto")
@@ -103,7 +116,7 @@ public class AvaliacaoController {
         @ApiResponse(responseCode = "200", description = "Lista de avaliações retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public PagedModel<EntityModel<Avaliacao>> getAvaliacoesByPosto(
+    public PagedModel<EntityModel<AvaliacaoResponse>> getAvaliacoesByPosto(
         @RequestParam(required = true) Long id,
         @RequestParam(required = false) Integer nota,
         @RequestParam(required = false) LocalDate data,
@@ -119,7 +132,7 @@ public class AvaliacaoController {
             } else {
                 page = avaliacaoService.findAllByPostoId(id, pageable);
             }
-            return pagedResourcesAssembler.toModel(page);
+            return pagedResourcesAssembler.toModel(page.map(AvaliacaoResponse::from));
     } 
 
     @GetMapping("/{id}")
@@ -129,22 +142,10 @@ public class AvaliacaoController {
         @ApiResponse(responseCode = "404", description = "Avaliação não encontrada"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<Avaliacao> getAvaliacaoById(@PathVariable Long id) {
+    public ResponseEntity<AvaliacaoResponse> getAvaliacaoById(@PathVariable Long id) {
         Avaliacao avaliacao = avaliacaoService.findById(id);
-        return ResponseEntity.ok(avaliacao);
-    }
-
-    @PostMapping
-    @ResponseStatus(CREATED)
-    @Operation(summary = "Cria uma nova avaliação.", description = "Endpoint para criar uma nova avaliação")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Avaliação cadastrada com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Erro de validação da avaliação"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public Avaliacao createAvaliacao(@RequestBody Avaliacao avaliacao) {
-        return avaliacaoService.create(avaliacao);
-    }   
+        return ResponseEntity.ok(AvaliacaoResponse.from(avaliacao));
+    }  
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza uma avaliação existente.", description = "Endpoint para atualizar uma avaliação existente com um ID informado")

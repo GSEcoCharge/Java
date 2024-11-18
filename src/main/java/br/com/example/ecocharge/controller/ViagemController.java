@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.example.ecocharge.dto.ViagemResponse;
 import br.com.example.ecocharge.model.Viagem;
 import br.com.example.ecocharge.service.ViagemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,20 +31,9 @@ public class ViagemController {
         @ApiResponse(responseCode = "200", description = "Lista de viagens retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<Viagem> index() {
-        return viagemService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Retorna uma viagem específica cadastrada no sistema.", description = "Endpoint que retorna um objeto do tipo viagem com um id informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Viagem encontrada com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Viagem não encontrada"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public ResponseEntity<Viagem> getViagemById(@PathVariable Long id) {
-        Viagem viagem = viagemService.findById(id);
-        return ResponseEntity.ok(viagem);
+    public List<ViagemResponse> index() {
+        List<Viagem> viagens = viagemService.findAll();
+        return viagens.stream().map(ViagemResponse::from).toList();
     }
 
     @PostMapping
@@ -56,6 +46,18 @@ public class ViagemController {
     })
     public Viagem createViagem(@RequestBody Viagem viagem) {
         return viagemService.create(viagem);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Retorna uma viagem específica cadastrada no sistema.", description = "Endpoint que retorna um objeto do tipo viagem com um id informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Viagem encontrada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Viagem não encontrada"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public ResponseEntity<Viagem> getViagemById(@PathVariable Long id) {
+        Viagem viagem = viagemService.findById(id);
+        return ResponseEntity.ok(viagem);
     }
 
     @PutMapping("/{id}")

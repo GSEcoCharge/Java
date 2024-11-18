@@ -35,12 +35,12 @@ public class PontoCarregamento {
     private String conector;
 
     @Column(name = "VELOCIDADE_CARREGAMENTO")
-    private int carregamento;
+    private Integer carregamento;
 
     @Column(name = "DISPONIBILIDADE")
     private String disponibilidade;
 
     @Column(name = "RESERVAVEL")
-    private char reservavel;
+    private Character reservavel;
 
 }

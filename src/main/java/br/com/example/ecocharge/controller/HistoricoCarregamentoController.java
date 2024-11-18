@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.example.ecocharge.dto.HistoricoCarregamentoResponse;
 import br.com.example.ecocharge.model.HistoricoCarregamento;
 import br.com.example.ecocharge.service.HistoricoCarregamentoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +41,7 @@ public class HistoricoCarregamentoController {
     private HistoricoCarregamentoService historicoCarregamentoService;
 
     @Autowired
-    PagedResourcesAssembler<HistoricoCarregamento> pagedResourcesAssembler;
+    PagedResourcesAssembler<HistoricoCarregamentoResponse> pagedResourcesAssembler;
 
     @GetMapping
     @Operation(summary = "Lista todos os históricos de carregamento.", description = "Endpoint que retorna uma lista de objetos do tipo histórico de carregamento")
@@ -48,7 +49,7 @@ public class HistoricoCarregamentoController {
         @ApiResponse(responseCode = "200", description = "Lista de históricos de carregamento retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public PagedModel<EntityModel<HistoricoCarregamento>> index(
+    public PagedModel<EntityModel<HistoricoCarregamentoResponse>> index(
         @RequestParam(required = false) LocalDate data,
         @RequestParam(required = false) BigDecimal consumo,
         @RequestParam(required = false) BigDecimal emissoes,
@@ -67,7 +68,18 @@ public class HistoricoCarregamentoController {
         } else {
             page = historicoCarregamentoService.findAll(pageable);
         }
-        return pagedResourcesAssembler.toModel(page);
+        return pagedResourcesAssembler.toModel(page.map(HistoricoCarregamentoResponse::from));
+    }
+
+    @PostMapping
+    @Operation(summary = "Cria um novo histórico de carregamento.", description = "Endpoint para criar um novo histórico de carregamento")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Histórico de carregamento criado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Erro de validação do histórico de carregamento"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public HistoricoCarregamento createHistoricoCarregamento(@RequestBody HistoricoCarregamento historicoCarregamento) {
+        return historicoCarregamentoService.create(historicoCarregamento);
     }
 
     @GetMapping("/{id}")
@@ -89,7 +101,7 @@ public class HistoricoCarregamentoController {
         @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public PagedModel<EntityModel<HistoricoCarregamento>> getHistoricosCarregamentoByUsuarioId(
+    public PagedModel<EntityModel<HistoricoCarregamentoResponse>> getHistoricosCarregamentoByUsuarioId(
         @RequestParam(required = true) Long id,
         @RequestParam(required = false) LocalDate data,
         @RequestParam(required = false) BigDecimal consumo,
@@ -109,7 +121,7 @@ public class HistoricoCarregamentoController {
         } else {
             page = historicoCarregamentoService.findAllByUsuarioId(id, pageable);
         }
-        return pagedResourcesAssembler.toModel(page);
+        return pagedResourcesAssembler.toModel(page.map(HistoricoCarregamentoResponse::from));
 }
 
     @GetMapping("/ponto/{pontoId}")
@@ -119,19 +131,10 @@ public class HistoricoCarregamentoController {
         @ApiResponse(responseCode = "404", description = "Ponto não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<HistoricoCarregamento> getHistoricosCarregamentoByPontoId(@PathVariable Long pontoId) {
-        return historicoCarregamentoService.findAllByPontoId(pontoId);
-    }
+    public List<HistoricoCarregamentoResponse> getHistoricosCarregamentoByPontoId(@PathVariable Long pontoId) {
+        List<HistoricoCarregamento> historicos = historicoCarregamentoService.findAllByPontoId(pontoId);
+        return historicos.stream().map(HistoricoCarregamentoResponse::from).toList();
 
-    @PostMapping
-    @Operation(summary = "Cria um novo histórico de carregamento.", description = "Endpoint para criar um novo histórico de carregamento")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Histórico de carregamento criado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Erro de validação do histórico de carregamento"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public HistoricoCarregamento createHistoricoCarregamento(@RequestBody HistoricoCarregamento historicoCarregamento) {
-        return historicoCarregamentoService.create(historicoCarregamento);
     }
 
     @PutMapping("/{id}")

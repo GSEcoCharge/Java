@@ -22,11 +22,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.POST, "/login").permitAll()
                     .anyRequest().permitAll())
-            // .oauth2Login(login -> login
-            //         .loginPage("/login")
-            //         .defaultSuccessUrl("/", true)
-            //         .userInfoEndpoint(userInfo -> userInfo.userService(usuarioService))
-            //         .permitAll())
+            .oauth2Login(login -> login
+                    .loginPage("/oauth2/authorization/google")
+                    .defaultSuccessUrl("/", true)
+                    .userInfoEndpoint(userInfo -> userInfo.userService(usuarioService))
+                    .permitAll())
             ;
                 return http.build();
     }

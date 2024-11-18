@@ -1,11 +1,14 @@
 package br.com.example.ecocharge.service;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -15,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +32,7 @@ import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.repository.UsuarioRepository;
 
 @Service
-public class UsuarioService {
+public class UsuarioService extends DefaultOAuth2UserService{
     @Autowired
     private PasswordEncoder passwordEncoder;
     
@@ -38,6 +44,24 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
         this.chatService = chatService;
         this.emailService = emailService;
+    }
+
+    public Usuario create(OAuth2User principal) {
+        if (usuarioRepository.findByEmail(principal.getAttribute("email")).isEmpty()){
+            return usuarioRepository.save(new Usuario(principal));
+        }
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Atendente já cadastrado");
+    }
+
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
+        var oauth2User = super.loadUser(userRequest);
+        String email = oauth2User.getAttribute("email");
+        return usuarioRepository.findByEmail(email).orElseGet(
+            () -> {
+                var usuario = new Usuario(oauth2User);
+                return usuarioRepository.save(usuario);
+            }
+        );
     }
 
     public List<Usuario> findAll() {
@@ -56,18 +80,8 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario create(OAuth2User principal) {
-        var usuario = new Usuario();
-        usuario.setNome(principal.getAttribute("name"));
-        usuario.setEmail(principal.getAttribute("email"));
-        usuario.setPerfil(principal.getAttribute("picture"));
-        usuario.setLocalizacao(principal.getAttribute("locale"));
-        return usuarioRepository.save(usuario);
-    }
-
-    public Usuario findByEmail(String email) {
-        return usuarioRepository.findByEmail(email)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    public Optional<Usuario> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
     public Usuario update(Long id, Usuario usuario) {
@@ -79,6 +93,18 @@ public class UsuarioService {
     public void deleteById(Long id) {
         usuarioRepository.deleteById(id);
     }
+
+    public String uploadImageGoogle(String url) throws IOException {
+        Path path = Paths.get("src/main/resources/static/files/");
+        Path destinationFile = path.resolve(Paths.get(System.currentTimeMillis() + ".jpg"))
+                .normalize().toAbsolutePath();
+        try (InputStream inputStream = new URL(url).openStream()) {
+            Files.copy(inputStream, destinationFile);
+            return destinationFile.getFileName().toString();
+        }catch (Exception e) {
+            throw new RuntimeException("Erro ao salvar o arquivo");
+        }
+        }
 
     public String uploadImage(Long id, MultipartFile file) {
         if (file.isEmpty()) {

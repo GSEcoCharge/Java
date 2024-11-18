@@ -79,6 +79,17 @@ public class PontoCarregamentoController {
         return pageAssembler.toModel(page);
     }
 
+    @PostMapping
+    @Operation(summary = "Cria um novo ponto de carregamento.", description = "Endpoint para criar um novo ponto de carregamento")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Ponto de carregamento cadastrado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Erro de validação do ponto de carregamento"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public PontoCarregamento createPontoCarregamento(@RequestBody PontoCarregamento pontoCarregamento) {
+        return pontoCarregamentoService.create(pontoCarregamento);
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Retorna um ponto de carregamento específico cadastrado no sistema.", description = "Endpoint que retorna um objeto do tipo ponto de carregamento com um id informado")
     @ApiResponses(value = {
@@ -137,17 +148,6 @@ public class PontoCarregamentoController {
     @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
         Page<PontoCarregamento> page =  pontoCarregamentoService.findAllByReservavel(reservavel, pageable);
         return pageAssembler.toModel(page, pontoCarregamento -> EntityModel.of(pontoCarregamento));
-    }
-
-    @PostMapping
-    @Operation(summary = "Cria um novo ponto de carregamento.", description = "Endpoint para criar um novo ponto de carregamento")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Ponto de carregamento cadastrado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Erro de validação do ponto de carregamento"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public PontoCarregamento createPontoCarregamento(@RequestBody PontoCarregamento pontoCarregamento) {
-        return pontoCarregamentoService.create(pontoCarregamento);
     }
 
     @PutMapping("/{id}")

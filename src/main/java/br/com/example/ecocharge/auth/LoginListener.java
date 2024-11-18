@@ -1,27 +1,50 @@
-// package br.com.example.ecocharge.auth;
+package br.com.example.ecocharge.auth;
 
-// import org.springframework.context.ApplicationListener;
-// import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-// import org.springframework.security.oauth2.core.user.OAuth2User;
-// import org.springframework.stereotype.Component;
+import java.io.IOException;
 
-// import br.com.example.ecocharge.service.UsuarioService;
-// import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationListener;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
 
-// @Component
-// @Slf4j
-// public class LoginListener implements ApplicationListener<AuthenticationSuccessEvent> {
+import br.com.example.ecocharge.model.Usuario;
+import br.com.example.ecocharge.service.UsuarioService;
+import lombok.extern.slf4j.Slf4j;
 
-//     private final UsuarioService usuarioService;
+@Component
+@Slf4j
+public class LoginListener implements ApplicationListener<AuthenticationSuccessEvent> {
 
-//     public LoginListener(UsuarioService usuarioService) {
-//         this.usuarioService = usuarioService;
-//     }
+    private final UsuarioService usuarioService;
 
-//     @Override
-//     public void onApplicationEvent(AuthenticationSuccessEvent event) {
-//         var principal = (OAuth2User) event.getAuthentication().getPrincipal();
-//         usuarioService.create(principal);
-//     }
+    public LoginListener(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
-// }
+    @Override
+    public void onApplicationEvent(AuthenticationSuccessEvent event) {
+        Object principal = (OAuth2User) event.getAuthentication().getPrincipal();
+        if (principal instanceof OAuth2User){
+            OAuth2User oauthUser = (OAuth2User) principal;
+            String email = oauthUser.getAttribute("email");
+            String name = oauthUser.getAttribute("name");
+            String perfil = oauthUser.getAttribute("picture");
+            String local = oauthUser.getAttribute("locales");
+            usuarioService.findByEmail(email).orElseGet(
+                () -> {
+                    Usuario usuario = new Usuario();
+                    usuario.setEmail(email);
+                    usuario.setNome(name);
+                    try {
+                        usuario.setPerfil(usuarioService.uploadImageGoogle(perfil));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    usuario.setSenha("123456");
+                    usuario.setLocalizacao(local);
+                    return usuarioService.create(usuario);
+                });
+        }
+    }
+
+}

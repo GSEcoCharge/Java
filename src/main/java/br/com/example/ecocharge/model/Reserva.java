@@ -1,6 +1,6 @@
 package br.com.example.ecocharge.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +39,7 @@ public class Reserva {
     private PontoCarregamento ponto;
 
     @Column(name = "DATA_RESERVA")
-    private Date data;
+    private LocalDate data;
 
     @Column(name = "STATUS")
     private String status;

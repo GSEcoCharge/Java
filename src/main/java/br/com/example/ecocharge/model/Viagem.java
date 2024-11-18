@@ -1,6 +1,6 @@
 package br.com.example.ecocharge.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,9 +40,9 @@ public class Viagem {
     private String destino;
     
     @Column(name = "AUTONOMIA_RESTANTE")
-    private int autonomiaRestante;
+    private Integer autonomiaRestante;
 
-    @Column(name = "NOTA_AVALIACAO")
-    private Date nota;
+    @Column(name = "DATA_CRIACAO")
+    private LocalDate data;
 
 }

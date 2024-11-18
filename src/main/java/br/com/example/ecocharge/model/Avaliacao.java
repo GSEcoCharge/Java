@@ -38,7 +38,7 @@ public class Avaliacao {
     private PostoCarregamento posto;
     
     @Column(name = "NOTA")
-    private int nota;
+    private Integer nota;
 
     @Column(name = "COMENTARIO")
     private String comentario;

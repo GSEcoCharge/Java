@@ -36,6 +36,6 @@ public class PontoParada {
     private PontoCarregamento ponto;
 
     @Column(name = "ORDEM")
-    private int ordem;
+    private Integer ordem;
 
 }

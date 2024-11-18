@@ -38,10 +38,10 @@ public class Veiculo {
     private String modelo;
 
     @Column(name = "ANO")
-    private int ano;
+    private Integer ano;
 
     @Column(name = "AUTONOMIA")
-    private int autonomia;
+    private Integer autonomia;
 
     @Column(name = "TIPO_CONECTOR")
     private String conector;

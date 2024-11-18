@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.example.ecocharge.dto.ReservaResponse;
 import br.com.example.ecocharge.model.Reserva;
 import br.com.example.ecocharge.service.ReservaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +41,7 @@ public class ReservaController {
     private ReservaService reservaService;
 
     @Autowired
-    PagedResourcesAssembler<Reserva> pagedResourcesAssembler;
+    PagedResourcesAssembler<ReservaResponse> pagedResourcesAssembler;
 
     @GetMapping
     @Operation(summary = "Lista todas as reservas cadastradas no sistema.", description = "Endpoint que retorna uma lista de objetos do tipo reserva")
@@ -48,7 +49,7 @@ public class ReservaController {
         @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public PagedModel<EntityModel<Reserva>> index(
+    public PagedModel<EntityModel<ReservaResponse>> index(
             @PathVariable(required = false) String status,
             @PathVariable(required = false) String data,
             @ParameterObject @PageableDefault(size = 10, sort = "id") Pageable pageable) {
@@ -64,41 +65,7 @@ public class ReservaController {
             } else {
                 page = reservaService.findAll(pageable);             
             }
-            return pagedResourcesAssembler.toModel(page);
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Retorna uma reserva específica cadastrada no sistema.", description = "Endpoint que retorna um objeto do tipo reserva com um id informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Reserva encontrada com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Reserva não encontrada"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public ResponseEntity<Reserva> getReservaById(@PathVariable Long id) {
-        Reserva reserva = reservaService.findById(id);
-        return ResponseEntity.ok(reserva);
-    }
-
-    @GetMapping("/usuario/{id}")
-    @Operation(summary = "Lista todas as reservas de um usuário específico.", description = "Endpoint que retorna uma lista de reservas de um usuário com um ID informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public List<Reserva> getReservasByUsuarioId(@PathVariable Long id) {
-        return reservaService.findAllByUsuarioId(id);
-    }
-
-    @GetMapping("/ponto/{id}")
-    @Operation(summary = "Lista todas as reservas de um ponto específico.", description = "Endpoint que retorna uma lista de reservas de um ponto com um ID informado")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Ponto não encontrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    public List<Reserva> getReservasByPontoId(@PathVariable Long id) {
-        return reservaService.findAllByPontoId(id);
+            return pagedResourcesAssembler.toModel(page.map(ReservaResponse::from));
     }
 
     @PostMapping
@@ -111,6 +78,42 @@ public class ReservaController {
     })
     public Reserva createReserva(@RequestBody Reserva reserva) {
         return reservaService.create(reserva);
+    }
+    
+    @GetMapping("/{id}")
+    @Operation(summary = "Retorna uma reserva específica cadastrada no sistema.", description = "Endpoint que retorna um objeto do tipo reserva com um id informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Reserva encontrada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Reserva não encontrada"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public ResponseEntity<ReservaResponse> getReservaById(@PathVariable Long id) {
+        Reserva reserva = reservaService.findById(id);
+        return ResponseEntity.ok(ReservaResponse.from(reserva));
+    }
+
+    @GetMapping("/usuario/{id}")
+    @Operation(summary = "Lista todas as reservas de um usuário específico.", description = "Endpoint que retorna uma lista de reservas de um usuário com um ID informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public List<ReservaResponse> getReservasByUsuarioId(@PathVariable Long id) {
+        List<Reserva> reservas = reservaService.findAllByUsuarioId(id);
+        return reservas.stream().map(ReservaResponse::from).toList();
+    }
+
+    @GetMapping("/ponto/{id}")
+    @Operation(summary = "Lista todas as reservas de um ponto específico.", description = "Endpoint que retorna uma lista de reservas de um ponto com um ID informado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Ponto não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public List<ReservaResponse> getReservasByPontoId(@PathVariable Long id) {
+        List<Reserva> reservas = reservaService.findAllByPontoId(id);
+        return reservas.stream().map(ReservaResponse::from).toList();
     }
 
     @PutMapping("/{id}")
