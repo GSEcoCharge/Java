@@ -17,8 +17,8 @@ stages:
           # 1. Fazer checkout do código do repositório
           - checkout: self
 
-          # 2. Configurar a versão do JDK
-          - task: UseJavaVersion@1
+          # 2. Instalar a versão do JDK (usando a tarefa JavaToolInstaller)
+          - task: JavaToolInstaller@0
             inputs:
               versionSpec: '11'
               jdkArchitecture: 'x64'
