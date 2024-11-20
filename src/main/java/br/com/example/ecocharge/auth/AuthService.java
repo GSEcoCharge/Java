@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.example.ecocharge.mail.EmailService;
-import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.service.UsuarioService;
 
 @Service
@@ -34,11 +33,10 @@ public class AuthService {
         return tokenService.createToken(credentials.email());
     }
 
-    public Token loginOAuth2(OAuth2User principal){
+    public Token loginOAuth2(OAuth2User principal) {
         var usuario = usuarioService.findByEmail(principal.getAttribute("email"))
-                                    .orElseGet(() -> new Usuario(principal));
+                                    .orElseGet(() -> usuarioService.create(principal));
         return tokenService.createToken(usuario.getEmail());
     }
-
 
 }

@@ -48,7 +48,9 @@ public class UsuarioService extends DefaultOAuth2UserService{
 
     public Usuario create(OAuth2User principal) {
         if (usuarioRepository.findByEmail(principal.getAttribute("email")).isEmpty()){
-            return usuarioRepository.save(new Usuario(principal));
+            Usuario usuario = new Usuario(principal);
+            usuario.setSenha(passwordEncoder.encode(principal.getAttribute("email")));
+            System.out.println("Usuário criado com sucesso" + usuario);
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT, "Atendente já cadastrado");
     }
@@ -59,6 +61,7 @@ public class UsuarioService extends DefaultOAuth2UserService{
         return usuarioRepository.findByEmail(email).orElseGet(
             () -> {
                 var usuario = new Usuario(oauth2User);
+                usuario.setSenha(passwordEncoder.encode(usuario.getEmail()));
                 return usuarioRepository.save(usuario);
             }
         );
@@ -154,5 +157,9 @@ public class UsuarioService extends DefaultOAuth2UserService{
         .orElseThrow(
             ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado")
         );
+    }
+
+    public String getGoogleProfileImage(OAuth2User principal) {
+        return principal.getAttribute("picture");
     }
 }

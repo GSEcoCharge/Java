@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -84,6 +85,17 @@ public class UsuarioController {
     })
     public ResponseEntity<Resource> getImageById(@PathVariable Long id) throws IOException {
         return usuarioService.getImageById(id);
+    }
+
+    @GetMapping("/google-profile-image")
+    @Operation(summary = "Retorna a imagem de perfil da conta do Google.", description = "Endpoint que retorna a imagem de perfil da conta do Google do usuário autenticado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Imagem de perfil retornada com sucesso"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public ResponseEntity<String> getGoogleProfileImage(OAuth2User principal) {
+        String imageUrl = usuarioService.getGoogleProfileImage(principal);
+        return ResponseEntity.ok(imageUrl);
     }
 
     @PutMapping("/{id}")

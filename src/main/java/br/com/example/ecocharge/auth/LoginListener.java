@@ -29,7 +29,6 @@ public class LoginListener implements ApplicationListener<AuthenticationSuccessE
             String email = oauthUser.getAttribute("email");
             String name = oauthUser.getAttribute("name");
             String perfil = oauthUser.getAttribute("picture");
-            String local = oauthUser.getAttribute("locales");
             usuarioService.findByEmail(email).orElseGet(
                 () -> {
                     Usuario usuario = new Usuario();
@@ -40,8 +39,7 @@ public class LoginListener implements ApplicationListener<AuthenticationSuccessE
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    usuario.setSenha("123456");
-                    usuario.setLocalizacao(local);
+                    usuario.setSenha(usuario.getEmail());
                     return usuarioService.create(usuario);
                 });
         }
