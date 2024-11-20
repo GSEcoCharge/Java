@@ -1,5 +1,7 @@
 package br.com.example.ecocharge.dto;
 
+import java.time.LocalDateTime;
+
 import br.com.example.ecocharge.model.Usuario;
 
 public record UsuarioResponse(
@@ -7,6 +9,7 @@ public record UsuarioResponse(
     String nome,
     String email,
     String perfil,
+    LocalDateTime criacao,
     String localizacao
 ) {
     public static UsuarioResponse from(Usuario usuario) {
@@ -15,6 +18,7 @@ public record UsuarioResponse(
             usuario.getNome(),
             usuario.getEmail(),
             usuario.getPerfil(),
+            usuario.getCriacao(),
             usuario.getLocalizacao()
         );
 

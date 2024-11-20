@@ -45,9 +45,17 @@ public class Usuario extends DefaultOAuth2User {
     
     @Column(name = "ULTIMA_LOCALIZACAO")
     private String localizacao;
+
     @PrePersist
     protected void onCreate() {
         criacao = LocalDateTime.now().withSecond(0).withNano(0);
+    }
+
+    public Usuario() {
+        super(List.of(), Map.of("name", "Anonymous", "email", "anonymous@example.com"), "name");
+        this.nome = "Anonymous";
+        this.email = "anonymous@example.com";
+        this.perfil = "default.jpg";
     }
 
     public Usuario(OAuth2User principal){
@@ -57,10 +65,4 @@ public class Usuario extends DefaultOAuth2User {
         this.perfil = principal.getAttribute("perfil");
     }
 
-    public Usuario() {
-        super(List.of(new SimpleGrantedAuthority("USER")), Map.of("email", "anonymous@example.com"), "email");
-        this.nome = "Anonymous";
-        this.email = "anonymous@example.com";
-        this.perfil = "default.png";
-    }
 }

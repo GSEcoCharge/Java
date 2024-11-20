@@ -24,22 +24,13 @@ public class AuthService {
         this.emailService = emailService;
     }
 
-    // public Token login(Credentials credentials) {
-    //     var usuario = usuarioService.findByEmail(credentials.email());
-    //     if (usuario == null || !passwordEncoder.matches(credentials.senha(), usuario.getSenha())) {
-    //         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário ou senha inválidos");
-    //     }
-    //     emailService.sendEmail(usuario.getEmail(), "Login", "Usuário logado com sucesso");
-    //     return tokenService.createToken(credentials.email());
-    // }
-
     public Token login(Credentials credentials) {
         var usuario = usuarioService.findByEmail(credentials.email());
         if (usuario.isEmpty() || !passwordEncoder.matches(credentials.senha(), usuario.get().getSenha())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário ou senha inválidos");
         }
         var s = usuario.get();
-        emailService.sendEmail(s.getEmail(), "Login", "Usuário logado com sucesso");
+        // emailService.sendEmail(s.getEmail(), "Login", "Usuário logado com sucesso");
         return tokenService.createToken(credentials.email());
     }
 

@@ -1,4 +1,4 @@
-package br.com.example.ecocharge;
+package br.com.example.ecocharge.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,8 +10,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -30,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.repository.UsuarioRepository;
-import br.com.example.ecocharge.service.UsuarioService;
 
 class UsuarioServiceTest {
 
