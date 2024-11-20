@@ -2,7 +2,7 @@
 name: Build_Java_Project_$(Build.BuildId)
 
 # Este pipeline será iniciado manualmente para cumprir o requisito
-trigger: none
+trigger: none  # Definido uma única vez
 
 # Pool de agentes padrão
 pool:
@@ -54,6 +54,3 @@ stages:
               pathToPublish: '$(System.DefaultWorkingDirectory)/target'
               artifactName: 'java-artifacts'
               publishLocation: 'Container'
-
-# Este pipeline não será disparado automaticamente, será necessário iniciar manualmente para cumprir os requisitos
-trigger: none
