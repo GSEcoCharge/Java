@@ -26,8 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.example.ecocharge.chat.ChatService;
-import br.com.example.ecocharge.mail.EmailService;
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.repository.UsuarioRepository;
 
@@ -37,13 +35,9 @@ public class UsuarioService extends DefaultOAuth2UserService{
     private PasswordEncoder passwordEncoder;
     
     private final UsuarioRepository usuarioRepository;
-    private final ChatService chatService;
-    private final EmailService emailService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, ChatService chatService, EmailService emailService) {
+    public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
-        this.chatService = chatService;
-        this.emailService = emailService;
     }
 
     public Usuario create(OAuth2User principal) {
