@@ -1,7 +1,7 @@
 # Nome do pipeline
 name: Build_Java_Project_$(Build.BuildId)
 
-# Este pipeline será iniciado manualmente para cumprir o requisito
+# Este pipeline será iniciado manualmente
 trigger: none  # Definido uma única vez
 
 # Pool de agentes padrão
@@ -17,14 +17,14 @@ stages:
           # 1. Fazer checkout do código do repositório
           - checkout: self
 
-          # 2. Instalar a versão do JDK (usando a tarefa JavaToolInstaller)
-          - task: JavaToolInstaller@0
+          # 2. Instalar a versão do JDK (usando a tarefa JavaToolInstaller com JDK 17)
+          - task: UseJavaVersion@1
             inputs:
-              versionSpec: '11'
+              versionSpec: '17'
               jdkArchitecture: 'x64'
 
           # 3. Compilar o projeto e empacotar sem executar testes
-          - task: Maven@3
+          - task: Maven@4
             displayName: 'Compilar e Empacotar Projeto'
             inputs:
               mavenPomFile: 'pom.xml'
@@ -32,7 +32,7 @@ stages:
               mavenOptions: '-Xmx1024m'
 
           # 4. Executar os testes (JUnit e/ou Selenium)
-          - task: Maven@3
+          - task: Maven@4
             displayName: 'Executar Testes Unitários'
             inputs:
               mavenPomFile: 'pom.xml'
@@ -43,9 +43,9 @@ stages:
           - task: PublishTestResults@2
             displayName: 'Publicar Resultados dos Testes Unitários'
             inputs:
-              testResultsFiles: '**/surefire-reports/TEST-*.xml'  # Corrigido para buscar os arquivos corretos
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'  # Busca os relatórios corretos
               testRunTitle: 'Resultados dos Testes Unitários'
-              failTaskOnFailedTests: false  # Ajuste para não falhar em testes com erro
+              failTaskOnFailedTests: false  # Não falhar em testes com erro
 
           # 6. (Opcional) Publicar os artefatos de build
           - task: PublishBuildArtifacts@1
@@ -54,3 +54,4 @@ stages:
               pathToPublish: '$(System.DefaultWorkingDirectory)/target'
               artifactName: 'java-artifacts'
               publishLocation: 'Container'
+
