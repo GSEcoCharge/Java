@@ -1,20 +1,7 @@
 # Nome do pipeline
-- task: Maven@4
-  inputs:
-    azureSubscription: 'Azure for Students(871d90f9-6fc9-41f7-8fbe-cf8c078c198e)'
-    mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.17'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
-    
 name: Build_Java_Project_$(Build.BuildId)
 
-# Este pipeline será iniciado manualmente para cumprir o requisito
+# Este pipeline será iniciado manualmente
 trigger: none
 
 # Pool de agentes padrão
@@ -30,14 +17,17 @@ stages:
           # 1. Fazer checkout do código do repositório
           - checkout: self
 
-          # 2. Configurar a versão do JDK
-          - task: UseJavaVersion@1
-            inputs:
-              versionSpec: '11'
-              jdkArchitecture: 'x64'
+          # 2. Instalar e Configurar Java 17
+          - script: |
+              sudo apt-get update
+              sudo apt-get install -y openjdk-17-jdk
+              export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+              export PATH=$JAVA_HOME/bin:$PATH
+              java -version
+            displayName: 'Instalar e Configurar Java 17'
 
           # 3. Compilar o projeto e empacotar sem executar testes
-          - task: Maven@3
+          - task: Maven@4
             displayName: 'Compilar e Empacotar Projeto'
             inputs:
               mavenPomFile: 'pom.xml'
@@ -45,25 +35,17 @@ stages:
               mavenOptions: '-Xmx1024m'
 
           # 4. Executar os testes (JUnit e/ou Selenium)
-          - task: Maven@3
+          - task: Maven@4
             displayName: 'Executar Testes Unitários'
             inputs:
               mavenPomFile: 'pom.xml'
               goals: 'test'
-            condition: succeededOrFailed() # Continua a execução mesmo se houver falhas nos testes
+            condition: succeededOrFailed()
 
           # 5. Publicar os resultados dos testes
           - task: PublishTestResults@2
             displayName: 'Publicar Resultados dos Testes Unitários'
             inputs:
-              testResultsFiles: '*/target/surefire-reports/.xml'
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
               testRunTitle: 'Resultados dos Testes Unitários'
-              failTaskOnFailedTests: false # Ajuste para não falhar em testes com erro
-
-          # 6. (Opcional) Publicar artefatos de build
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publicar Artefatos'
-            inputs:
-              pathToPublish: '$(System.DefaultWorkingDirectory)/target'
-              artifactName: 'java-artifacts'
-              publishLocation: 'Container'
+              failTaskOnFailedTests: false
