@@ -2,7 +2,7 @@
 name: Build_Java_Project_$(Build.BuildId)
 
 # Este pipeline será iniciado manualmente
-trigger: none  # Definido uma única vez
+trigger: none
 
 # Pool de agentes padrão
 pool:
@@ -17,11 +17,14 @@ stages:
           # 1. Fazer checkout do código do repositório
           - checkout: self
 
-          # 2. Instalar a versão do JDK (usando a tarefa JavaToolInstaller com JDK 17)
-          - task: UseJavaVersion@1
-            inputs:
-              versionSpec: '17'
-              jdkArchitecture: 'x64'
+          # 2. Instalar e Configurar Java 17
+          - script: |
+              sudo apt-get update
+              sudo apt-get install -y openjdk-17-jdk
+              export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+              export PATH=$JAVA_HOME/bin:$PATH
+              java -version
+            displayName: 'Instalar e Configurar Java 17'
 
           # 3. Compilar o projeto e empacotar sem executar testes
           - task: Maven@4
@@ -37,21 +40,12 @@ stages:
             inputs:
               mavenPomFile: 'pom.xml'
               goals: 'test'
-            condition: succeededOrFailed() # Continua a execução mesmo se houver falhas nos testes
+            condition: succeededOrFailed()
 
           # 5. Publicar os resultados dos testes
           - task: PublishTestResults@2
             displayName: 'Publicar Resultados dos Testes Unitários'
             inputs:
-              testResultsFiles: '**/surefire-reports/TEST-*.xml'  # Busca os relatórios corretos
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
               testRunTitle: 'Resultados dos Testes Unitários'
-              failTaskOnFailedTests: false  # Não falhar em testes com erro
-
-          # 6. (Opcional) Publicar os artefatos de build
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publicar Artefatos'
-            inputs:
-              pathToPublish: '$(System.DefaultWorkingDirectory)/target'
-              artifactName: 'java-artifacts'
-              publishLocation: 'Container'
-
+              failTaskOnFailedTests: false
