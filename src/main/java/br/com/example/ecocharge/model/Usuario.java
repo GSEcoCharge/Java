@@ -16,6 +16,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -28,12 +30,16 @@ public class Usuario extends DefaultOAuth2User {
     @Column(name = "USUARIO_ID")
     private Long id;
 
+    @NotBlank
     @Column(name = "NOME")
     private String nome;
 
+    @Email
+    @NotBlank
     @Column(name = "EMAIL")
     private String email;
 
+    @NotBlank
     @Column(name = "SENHA")
     private String senha;
 

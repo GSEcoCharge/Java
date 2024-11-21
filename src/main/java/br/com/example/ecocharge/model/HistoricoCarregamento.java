@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,12 +40,17 @@ public class HistoricoCarregamento {
     @JoinColumn(name = "PONTO_ID")
     private PontoCarregamento ponto;
 
+    @NotNull
     @Column(name = "DATA_CARREGAMENTO")
     private LocalDate data;
 
+    @NotNull
+    @DecimalMin("0.0")
     @Column(name = "ENERGIA_CONSUMIDA")
     private BigDecimal consumo;
 
+    @NotNull
+    @DecimalMin("0.0")
     @Column(name = "EMISSOES_EVITADAS")
     private BigDecimal emissoes;
 

@@ -41,7 +41,6 @@ class AvaliacaoServiceTest {
         when(avaliacaoRepository.findAll(pageable)).thenReturn(expectedPage);
 
         Page<Avaliacao> result = avaliacaoService.findAll(pageable);
-
         assertEquals(expectedPage, result);
     }
 

@@ -12,6 +12,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,9 +40,11 @@ public class Reserva {
     @JoinColumn(name = "PONTO_ID")
     private PontoCarregamento ponto;
 
+    @NotNull
     @Column(name = "DATA_RESERVA")
     private LocalDate data;
 
+    @NotBlank
     @Column(name = "STATUS")
     private String status;
 

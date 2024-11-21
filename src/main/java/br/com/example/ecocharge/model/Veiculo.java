@@ -9,6 +9,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,20 +34,26 @@ public class Veiculo {
     @JoinColumn(name = "USUARIO_ID")
     private Usuario usuario;
 
+    @NotBlank
     @Column(name = "MARCA")
     private String marca;
 
+    @NotBlank
     @Column(name = "MODELO")
     private String modelo;
 
+    @NotNull
+    @Min(1886)
     @Column(name = "ANO")
     private Integer ano;
 
+    @NotNull
+    @Min(0)
     @Column(name = "AUTONOMIA")
     private Integer autonomia;
 
+    @NotBlank
     @Column(name = "TIPO_CONECTOR")
     private String conector;
 
-    
 }

@@ -9,6 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +37,8 @@ public class PontoParada {
     @JoinColumn(name = "PONTO_ID")
     private PontoCarregamento ponto;
 
+    @NotNull
+    @Min(1)
     @Column(name = "ORDEM")
     private Integer ordem;
 

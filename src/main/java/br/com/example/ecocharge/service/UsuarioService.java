@@ -50,7 +50,6 @@ public class UsuarioService extends DefaultOAuth2UserService{
         if (usuarioRepository.findByEmail(principal.getAttribute("email")).isEmpty()){
             Usuario usuario = new Usuario(principal);
             usuario.setSenha(passwordEncoder.encode(principal.getAttribute("email")));
-            System.out.println("Usuário criado com sucesso" + usuario);
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT, "Atendente já cadastrado");
     }
