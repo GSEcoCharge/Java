@@ -1,0 +1,97 @@
+{
+  "Viagem": {
+    "id": 1,
+    "usuario": {
+      "id": 1
+    },
+    "origem": "São Paulo",
+    "destino": "Rio de Janeiro",
+    "autonomiaRestante": 150,
+    "data": "2024-01-01"
+  },
+  "Veiculo": {
+    "id": 1,
+    "usuario": {
+      "id": 1
+    },
+    "marca": "Tesla",
+    "modelo": "Model S",
+    "ano": 2022,
+    "autonomia": 600,
+    "conector": "Tipo 2"
+  },
+  "Usuario": {
+    "id": 1,
+    "nome": "João Silva",
+    "email": "joao.silva@example.com",
+    "senha": "senha123",
+    "perfil": "default.jpg",
+    "criacao": "2024-01-01T00:00:00",
+    "localizacao": "São Paulo"
+  },
+  "Reserva": {
+    "id": 1,
+    "usuario": {
+      "id": 1
+    },
+    "ponto": {
+      "id": 1
+    },
+    "data": "2024-01-01",
+    "status": "Confirmada"
+  },
+  "PostoCarregamento": {
+    "id": 1,
+    "nome": "Posto 1",
+    "latitude": -23.55052,
+    "longitude": -46.633308,
+    "endereco": "Av. Paulista, 1000",
+    "expediente": "24 horas",
+    "pagamento": "Cartão de Crédito",
+    "avaliacao": 4.5
+  },
+  "PontoParada": {
+    "id": 1,
+    "viagem": {
+      "id": 1
+    },
+    "ponto": {
+      "id": 1
+    },
+    "ordem": 1
+  },
+  "PontoCarregamento": {
+    "id": 1,
+    "posto": {
+      "id": 1
+    },
+    "conector": "Tipo 2",
+    "carregamento": 50,
+    "disponibilidade": "Disponível",
+    "reservavel": "S"
+  },
+  "HistoricoCarregamento": {
+    "id": 1,
+    "usuario": {
+      "id": 1
+    },
+    "ponto": {
+      "id": 1
+    },
+    "data": "2024-01-01",
+    "consumo": 20.5,
+    "emissoes": 0.0
+  },
+  "Avaliacao": {
+    "id": 1,
+    "usuario": {
+      "id": 1
+    },
+    "posto": {
+      "id": 1
+    },
+    "nota": 5,
+    "comentario": "Excelente posto de carregamento!",
+    "data": "2024-01-01"
+  }
+}

@@ -1,5 +1,27 @@
 # EcoCharge
 
+## Introdução
+
+O uso de veículos elétricos (VEs) tem experimentado um crescimento expressivo nos últimos anos, impulsionado pela urgente necessidade de reduzir as emissões de carbono e cumprir metas globais de sustentabilidade. Os VEs oferecem uma alternativa mais ecológica em comparação aos veículos movidos a combustíveis fósseis, contribuindo para a diminuição da poluição do ar e do impacto ambiental. No entanto, a ampla adoção desses veículos ainda enfrenta desafios significativos, principalmente relacionados à infraestrutura de carregamento e ao planejamento de viagens para veículos com autonomia limitada.
+
+Neste contexto, a EcoCharge surge como uma solução inovadora, dedicada a simplificar o acesso a pontos de carregamento e otimizar o uso dos VEs. A proposta da EcoCharge é fornecer uma plataforma digital que permite aos usuários localizar e acessar pontos de carregamento de forma eficiente, além de facilitar o planejamento de viagens, garantindo que os motoristas de VEs possam maximizar a autonomia de seus veículos e minimizar o tempo de inatividade. Com soluções como a EcoCharge, a transição para a mobilidade elétrica se torna mais viável e acessível, promovendo um futuro mais sustentável.
+
+## Problemática
+
+Atualmente, no Brasil, de acordo com a Associação Brasileira de Veículos Elétricos (ABVE), temos cerca de 78.000 veículos elétricos circulando pelas ruas do país, sendo 40.601 deles veículos elétricos leves ou carros de passeio. A ABVE prevê que esse número ultrapassará os 100.000 até janeiro de 2025, fazendo com que a frota de veículos elétricos aumente de 2% para 3,3%. As projeções indicam que, em 2027, essa porcentagem deverá crescer para 5,6%, e em 2029 para 9,8%, o que representará um impacto significativo no meio ambiente brasileiro, apesar de ainda não ser proporcional à quantidade de veículos a combustão nas ruas.
+
+O maior desafio enfrentado por potenciais compradores de veículos elétricos é a infraestrutura de carregamento. Muitas pessoas se perguntam: “Onde posso carregar meu veículo?” e “Onde estão localizados os postos de recarga?”. Em março de 2024, havia apenas 4.600 pontos de recarga para carros elétricos no país, segundo a ABVE. Embora a previsão seja de que esse número aumente para 10.000 no início de 2025, a quantidade atual ainda é insuficiente para atender à crescente demanda.
+
+O problema real para os motoristas de veículos elétricos hoje é saber até onde seu carro pode chegar com a carga disponível e onde está o ponto de recarga mais próximo.
+
+## Objetivo
+
+A EcoCharge tem como objetivo principal resolver o maior desafio enfrentado pelos proprietários e futuros proprietários de veículos elétricos, proporcionando uma experiência de recarga mais tranquila, eficaz e segura. A solução da EcoCharge facilita o acesso a postos de carregamento próximos utilizando a localização do usuário. O aplicativo exibe postos nas proximidades, detalhando o tipo de carregamento oferecido, os conectores disponíveis, horário de funcionamento, entre outras informações relevantes para os condutores.
+
+Além disso, a EcoCharge oferece um planejador de viagens otimizado para veículos elétricos, sugerindo rotas com pontos de carregamento estratégicos, levando em consideração a autonomia do veículo e a infraestrutura disponível ao longo do percurso. A aplicação também permite a criação de perfis de usuários e o registro do histórico de carregamento, possibilitando o monitoramento do uso e das emissões evitadas, promovendo a conscientização sobre o impacto ambiental positivo.
+
+A EcoCharge também visa incentivar uma rede de carregamento confiável através do feedback dos usuários. A plataforma permite a avaliação dos postos de carregamento, promovendo uma rede orientada pela experiência dos motoristas. Com essas funcionalidades, a EcoCharge otimiza a utilização dos veículos elétricos e contribui para uma transição mais fluida para a mobilidade elétrica.
+
 ## Sobre o Projeto
 
 **EcoCharge** é um projeto de aplicativo de transporte sustentável desenvolvido por estudantes da **FIAP** como parte da Global Solution. Este aplicativo é voltado para promover o uso de veículos elétricos (VEs) ao facilitar o acesso a pontos de carregamento e otimizar o planejamento de viagens. Nossa equipe de cinco integrantes está comprometida em criar uma experiência prática e intuitiva para motoristas de VEs, contribuindo com um futuro mais sustentável.
@@ -20,19 +42,12 @@
   Visualize postos de carregamento próximos com informações detalhadas sobre a ocupação atual, tipos de conectores e velocidade de carregamento.
 - **Disponibilidade e Reservas**  
   Verifique a disponibilidade em tempo real e, onde aplicável, reserve o ponto de carregamento desejado.
-
 - **Planejador de Viagem para VEs**  
   Planeje suas viagens com segurança, recebendo sugestões de rotas com pontos de carregamento estratégicos ao longo do trajeto.
-
 - **Perfis e Histórico de Carregamento**  
   Crie um perfil, registre seu histórico de carregamentos e acompanhe estatísticas de impacto ambiental.
-
 - **Feedback e Avaliações**  
   Avalie os pontos de carregamento para contribuir com uma rede mais confiável e orientada pela experiência dos usuários.
-
-## Objetivo
-
-Nosso objetivo é impulsionar a adoção de veículos elétricos, oferecendo um aplicativo acessível e intuitivo que ajude motoristas de VEs a planejar suas viagens com tranquilidade e facilidade, incentivando o uso de energia limpa e reduzindo as emissões de carbono.
 
 ---
 
@@ -68,7 +83,6 @@ Junte-se a nós nessa jornada por um futuro mais sustentável!
 
 - **spring-boot-starter-web**: Fornece recursos essenciais para desenvolver aplicativos da web no Spring Boot, como configuração do servidor incorporado e suporte a RESTful.
 - **spring-boot-devtools**: Facilita o desenvolvimento ao oferecer ferramentas como reinicialização automática do aplicativo e configurações específicas de desenvolvimento.
-- **ojdbc8**: Driver JDBC para Oracle Database, permitindo a conexão e interação de aplicativos Java com o Oracle Database.
 - **lombok**: Reduz a verbosidade do código Java automatizando a geração de métodos padrão, como getters, setters e construtores, através de anotações.
 - **spring-boot-starter-test**: Oferece suporte para testes em aplicativos Spring Boot, incluindo bibliotecas como JUnit e Mockito, simplificando a escrita e execução de testes.
 - **spring-boot-starter-data-jpa**: Simplifica o acesso e manipulação de dados em bancos de dados através do Spring Data JPA, configurando automaticamente a camada de persistência para trabalhar com JPA em aplicativos Spring Boot.
