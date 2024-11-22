@@ -40,7 +40,6 @@ public class HistoricoCarregamento {
     @JoinColumn(name = "PONTO_ID")
     private PontoCarregamento ponto;
 
-    @NotNull
     @Column(name = "DATA_CARREGAMENTO")
     private LocalDate data;
 

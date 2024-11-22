@@ -20,10 +20,10 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
         http
             .authorizeHttpRequests(auth -> auth
-                    // .requestMatchers(HttpMethod.GET, "/login").permitAll()
-                    // .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                    // .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-                    .anyRequest().permitAll())
+                    .requestMatchers(HttpMethod.GET, "/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                    .anyRequest().authenticated())
             .oauth2Login(login -> login
                     .loginPage("/oauth2/authorization/google")
                     .defaultSuccessUrl("/", true)
