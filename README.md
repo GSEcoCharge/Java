@@ -6,7 +6,7 @@
 
 # Vídeo do Código
 
-[Link do Video]()
+[Link do Video](https://youtu.be/o7f56VZMOXU?si=MUX4wba4XZ0jG7Ok)
 
 # Link do Projeto Railway
 
