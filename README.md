@@ -225,4 +225,4 @@ O sistema está organizado seguindo a arquitetura MVC:
 
 # Diagrama de Classes e Métodos
 
-![](docs\Java.jpg)
+![Diagrama](docs\Java.jpg)
