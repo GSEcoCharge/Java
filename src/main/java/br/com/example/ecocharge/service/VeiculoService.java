@@ -18,30 +18,34 @@ public class VeiculoService {
     @Autowired
     private VeiculoRepository veiculoRepository;
 
+    public List<Veiculo> findAll() {
+        return veiculoRepository.findAll();
+    }
+
     public Page<Veiculo> findAll(Pageable pageable) {
         return veiculoRepository.findAll(pageable);
     }
-    
+
     public Page<Veiculo> findAllByModeloAndMarcaAndAnoAndAutonomia(String modelo, String marca,
             Integer ano, Integer autonomia, Pageable pageable) {
-                return veiculoRepository.findAllByModeloAndMarcaAndAnoAndAutonomia(modelo, marca, ano, autonomia, pageable);
-        
+        return veiculoRepository.findAllByModeloAndMarcaAndAnoAndAutonomia(modelo, marca, ano, autonomia, pageable);
+
     }
 
     public Page<Veiculo> findAllByMarcaAndModelo(String marca, String modelo, Pageable pageable) {
         return veiculoRepository.findAllByMarcaAndModelo(marca, modelo, pageable);
-        
+
     }
 
     public Page<Veiculo> findAllByAnoAndAutonomia(Integer ano, Integer autonomia,
             Pageable pageable) {
-                return veiculoRepository.findAllByAnoAndAutonomia(ano, autonomia, pageable);
-        
+        return veiculoRepository.findAllByAnoAndAutonomia(ano, autonomia, pageable);
+
     }
 
     public Page<Veiculo> findAllByAutonomiaAndMarca(Integer autonomia, String marca, Pageable pageable) {
         return veiculoRepository.findAllByAutonomiaAndMarca(autonomia, marca, pageable);
-        
+
     }
 
     public Page<Veiculo> findAllByAutonomiaAndAno(Integer autonomia, Integer ano, Pageable pageable) {
@@ -57,7 +61,8 @@ public class VeiculoService {
     }
 
     public Veiculo findById(Long id) {
-        return veiculoRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrado o veículo com o id: " + id));
+        return veiculoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Não foi encontrado o veículo com o id: " + id));
     }
 
     public Veiculo create(Veiculo veiculo) {
@@ -74,11 +79,9 @@ public class VeiculoService {
         return veiculoRepository.save(veiculo);
     }
 
-    public void verificarId(Long id){
-        veiculoRepository.
-        findById(id)
-        .orElseThrow(
-            ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado")
-        );
+    public void verificarId(Long id) {
+        veiculoRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado"));
     }
 }

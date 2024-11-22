@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head><link rel="stylesheet" href="/css/navbar.css" />
+    <title>Lista de Pontos de Carregamento</title>
+    <link rel="stylesheet" href="/css/views.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <main>
+      <h1>Lista de Pontos de Carregamento</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Posto</th>
+            <th>Tipo de Conector</th>
+            <th>Velocidade de Carregamento</th>
+            <th>Disponibilidade</th>
+            <th>Reservável</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="ponto : ${pontos}">
+            <td th:text="${ponto.id}"></td>
+            <td th:text="${ponto.posto.nome}"></td>
+            <td th:text="${ponto.conector}"></td>
+            <td th:text="${ponto.carregamento} + ' kW'"></td>
+            <td th:text="${ponto.disponibilidade}"></td>
+            <td th:text="${ponto.reservavel == 'Y' ? 'Sim' : 'Não'}"></td>
+            <td class="actions">
+              <a
+                th:href="@{/pontos/edit/{id}(id=${ponto.id})}"
+                title="Editar"
+                class="action-icon"
+                ><i class="fas fa-edit"></i
+              ></a>
+              <a
+                th:href="@{/pontos/delete/{id}(id=${ponto.id})}"
+                title="Deletar"
+                class="action-icon"
+                onclick="return confirm('Deseja excluir este ponto?');"
+                ><i class="fas fa-trash"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <a href="/pontos/create" class="btn-create"
+        ><p>Adicionar Novo Ponto</p>
+        <i class="fas fa-plus"></i
+      ></a>
+    </main>
+  </body>
+</html>

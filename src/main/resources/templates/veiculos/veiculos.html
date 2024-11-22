@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <title>Lista de Veículos</title>
+    <link rel="stylesheet" href="/css/views.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <main>
+      <h1>Lista de Veículos</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Ano</th>
+            <th>Autonomia (km)</th>
+            <th>Tipo de Conector</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="veiculo : ${veiculos}">
+            <td th:text="${veiculo.id}"></td>
+            <td
+              th:text="${veiculo.usuario != null ? veiculo.usuario.nome : 'N/A'}"
+            ></td>
+            <td th:text="${veiculo.marca}"></td>
+            <td th:text="${veiculo.modelo}"></td>
+            <td th:text="${veiculo.ano}"></td>
+            <td th:text="${veiculo.autonomia}"></td>
+            <td th:text="${veiculo.conector}"></td>
+            <td class="actions">
+              <a
+                th:href="@{/veiculos/edit/{id}(id=${veiculo.id})}"
+                title="Editar"
+                class="action-icon"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+              <a
+                th:href="@{/veiculos/delete/{id}(id=${veiculo.id})}"
+                onclick="return confirm('Tem certeza que deseja deletar este veículo?');"
+                title="Deletar"
+                class="action-icon"
+              >
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <a href="/veiculos/create" class="btn-create"
+        ><p>Adicionar Novo Veículo</p>
+        <i class="fas fa-plus"></i>
+      </a>
+    </main>
+  </body>
+</html>

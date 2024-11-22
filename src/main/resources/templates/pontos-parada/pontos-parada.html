@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Pontos de Parada</title>
+    <link rel="stylesheet" href="/css/views.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <main>
+      <h1>Lista de Pontos de Parada</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Viagem</th>
+            <th>Ponto de Carregamento</th>
+            <th>Ordem</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="pontoParada : ${pontosParada}">
+            <td th:text="${pontoParada.id}"></td>
+            <td th:text="${pontoParada.viagem.id}"></td>
+            <td th:text="${pontoParada.ponto.posto.nome}"></td>
+            <td th:text="${pontoParada.ordem}"></td>
+            <td class="actions">
+              <a
+                th:href="@{/pontos-parada/edit/{id}(id=${pontoParada.id})}"
+                title="Editar"
+                class="action-icon"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+              <a
+                th:href="@{/pontos-parada/delete/{id}(id=${pontoParada.id})}"
+                title="Deletar"
+                class="action-icon"
+                onclick="return confirm('Deseja excluir este ponto de parada?');"
+              >
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <a href="/pontos-parada/create" class="btn-create"
+        ><p>Adicionar Novo Ponto de Parada</p>
+        <i class="fas fa-plus"></i>
+      </a>
+    </main>
+  </body>
+</html>

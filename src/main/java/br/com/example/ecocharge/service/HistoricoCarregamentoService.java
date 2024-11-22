@@ -20,50 +20,59 @@ public class HistoricoCarregamentoService {
     @Autowired
     private HistoricoCarregamentoRepository historicoCarregamentoRepository;
 
+    public List<HistoricoCarregamento> findAll() {
+        return historicoCarregamentoRepository.findAll();
+    }
+
     public Page<HistoricoCarregamento> findAll(Pageable pageable) {
         return historicoCarregamentoRepository.findAll(pageable);
     }
 
     public Page<HistoricoCarregamento> findAllByDataAndConsumoAndEmissoes(LocalDate data, BigDecimal consumo,
             BigDecimal emissoes, Pageable pageable) {
-                return historicoCarregamentoRepository.findAllByDataAndConsumoAndEmissoes(data, consumo, emissoes, pageable);
+        return historicoCarregamentoRepository.findAllByDataAndConsumoAndEmissoes(data, consumo, emissoes, pageable);
     }
 
     public Page<HistoricoCarregamento> findAllByConsumoAndEmissoes(BigDecimal consumo, BigDecimal emissoes,
             Pageable pageable) {
-                return historicoCarregamentoRepository.findAllByConsumoAndEmissoes(consumo, emissoes, pageable);
+        return historicoCarregamentoRepository.findAllByConsumoAndEmissoes(consumo, emissoes, pageable);
     }
 
     public Page<HistoricoCarregamento> findAllByEmissoesAndData(BigDecimal emissoes, LocalDate data,
             Pageable pageable) {
-                return historicoCarregamentoRepository.findAllByEmissoesAndData(emissoes, data, pageable);
+        return historicoCarregamentoRepository.findAllByEmissoesAndData(emissoes, data, pageable);
     }
 
     public Page<HistoricoCarregamento> findAllByDataAndConsumo(LocalDate data, BigDecimal consumo, Pageable pageable) {
-                return historicoCarregamentoRepository.findAllByDataAndConsumo(data, consumo, pageable);
+        return historicoCarregamentoRepository.findAllByDataAndConsumo(data, consumo, pageable);
     }
 
-    public Page<HistoricoCarregamento> findAllByUsuarioWithDataAndConsumoAndEmissoes(Long id, LocalDate data, BigDecimal consumo,
+    public Page<HistoricoCarregamento> findAllByUsuarioWithDataAndConsumoAndEmissoes(Long id, LocalDate data,
+            BigDecimal consumo,
             BigDecimal emissoes, Pageable pageable) {
-                return historicoCarregamentoRepository.findAllByUsuarioWithDataAndConsumoAndEmissoes(id, data, consumo, emissoes, pageable);
+        return historicoCarregamentoRepository.findAllByUsuarioWithDataAndConsumoAndEmissoes(id, data, consumo,
+                emissoes, pageable);
     }
 
-    public Page<HistoricoCarregamento> findAllByUsuarioWithConsumoAndEmissoes(Long id, BigDecimal consumo, BigDecimal emissoes,
+    public Page<HistoricoCarregamento> findAllByUsuarioWithConsumoAndEmissoes(Long id, BigDecimal consumo,
+            BigDecimal emissoes,
             Pageable pageable) {
-                return historicoCarregamentoRepository.findAllByUsuarioWithConsumoAndEmissoes(id, consumo, emissoes, pageable);
+        return historicoCarregamentoRepository.findAllByUsuarioWithConsumoAndEmissoes(id, consumo, emissoes, pageable);
     }
 
     public Page<HistoricoCarregamento> findAllByUsuarioWithEmissoesAndData(Long id, BigDecimal emissoes, LocalDate data,
             Pageable pageable) {
-                return historicoCarregamentoRepository.findAllByUsuarioWithEmissoesAndData(id, emissoes, data, pageable);
+        return historicoCarregamentoRepository.findAllByUsuarioWithEmissoesAndData(id, emissoes, data, pageable);
     }
 
-    public Page<HistoricoCarregamento> findAllByUsuarioWithDataAndConsumo(Long id, LocalDate data, BigDecimal consumo, Pageable pageable) {
-                return historicoCarregamentoRepository.findAllByUsuarioWithDataAndConsumo(id, data, consumo, pageable);
+    public Page<HistoricoCarregamento> findAllByUsuarioWithDataAndConsumo(Long id, LocalDate data, BigDecimal consumo,
+            Pageable pageable) {
+        return historicoCarregamentoRepository.findAllByUsuarioWithDataAndConsumo(id, data, consumo, pageable);
     }
 
     public HistoricoCarregamento findById(Long id) {
-        return historicoCarregamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrado o histórico de carregamento com o id: " + id));
+        return historicoCarregamentoRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Não foi encontrado o histórico de carregamento com o id: " + id));
     }
 
     public HistoricoCarregamento create(HistoricoCarregamento historicoCarregamento) {
@@ -88,11 +97,9 @@ public class HistoricoCarregamentoService {
         return historicoCarregamentoRepository.save(historicoCarregamento);
     }
 
-    public void verificarId(Long id){
-        historicoCarregamentoRepository.
-        findById(id)
-        .orElseThrow(
-            ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado")
-        );
+    public void verificarId(Long id) {
+        historicoCarregamentoRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado"));
     }
 }

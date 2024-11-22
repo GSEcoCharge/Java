@@ -30,10 +30,10 @@ import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.repository.UsuarioRepository;
 
 @Service
-public class UsuarioService extends DefaultOAuth2UserService{
+public class UsuarioService extends DefaultOAuth2UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     private final UsuarioRepository usuarioRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
@@ -41,23 +41,22 @@ public class UsuarioService extends DefaultOAuth2UserService{
     }
 
     public Usuario create(OAuth2User principal) {
-        if (usuarioRepository.findByEmail(principal.getAttribute("email")).isEmpty()){
+        if (usuarioRepository.findByEmail(principal.getAttribute("email")).isEmpty()) {
             Usuario usuario = new Usuario(principal);
             usuario.setSenha(passwordEncoder.encode(principal.getAttribute("email")));
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT, "Atendente já cadastrado");
     }
 
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         var oauth2User = super.loadUser(userRequest);
         String email = oauth2User.getAttribute("email");
         return usuarioRepository.findByEmail(email).orElseGet(
-            () -> {
-                var usuario = new Usuario(oauth2User);
-                usuario.setSenha(passwordEncoder.encode(usuario.getEmail()));
-                return usuarioRepository.save(usuario);
-            }
-        );
+                () -> {
+                    var usuario = new Usuario(oauth2User);
+                    usuario.setSenha(passwordEncoder.encode(usuario.getEmail()));
+                    return usuarioRepository.save(usuario);
+                });
     }
 
     public List<Usuario> findAll() {
@@ -66,12 +65,13 @@ public class UsuarioService extends DefaultOAuth2UserService{
 
     public Usuario findById(Long id) {
         return usuarioRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Não foi encontrado o usuário com o id: " + id));
+                .orElseThrow(() -> new RuntimeException("Não foi encontrado o usuário com o id: " + id));
     }
 
     public Usuario create(Usuario usuario) {
         // String script = chatService.sentToAi(usuario);
-        // emailService.sendEmail(usuario.getEmail(), "Bem-vindo ao EcoCharge!", script);
+        // emailService.sendEmail(usuario.getEmail(), "Bem-vindo ao EcoCharge!",
+        // script);
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
@@ -97,10 +97,10 @@ public class UsuarioService extends DefaultOAuth2UserService{
         try (InputStream inputStream = new URL(url).openStream()) {
             Files.copy(inputStream, destinationFile);
             return destinationFile.getFileName().toString();
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Erro ao salvar o arquivo");
         }
-        }
+    }
 
     public String uploadImage(Long id, MultipartFile file) {
         if (file.isEmpty()) {
@@ -137,19 +137,17 @@ public class UsuarioService extends DefaultOAuth2UserService{
         String fileName = usuario.getPerfil();
         Path path = Paths.get("src/main/resources/static/files/" + fileName);
         Resource resource = new UrlResource(path.toUri());
-        
+
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
-    }    
+    }
 
-    public void verificarId(Long id){
-        usuarioRepository.
-        findById(id)
-        .orElseThrow(
-            ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado")
-        );
+    public void verificarId(Long id) {
+        usuarioRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado"));
     }
 
     public String getGoogleProfileImage(OAuth2User principal) {

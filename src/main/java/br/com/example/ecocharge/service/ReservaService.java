@@ -18,6 +18,10 @@ public class ReservaService {
     @Autowired
     private ReservaRepository reservaRepository;
 
+    public List<Reserva> findAll() {
+        return reservaRepository.findAll();
+    }
+
     public Page<Reserva> findAll(Pageable pageable) {
         return reservaRepository.findAll(pageable);
     }

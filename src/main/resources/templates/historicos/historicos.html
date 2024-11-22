@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head><link rel="stylesheet" href="/css/navbar.css" />
+    <title>Histórico de Carregamentos</title>
+    <link rel="stylesheet" href="/css/views.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <main>
+      <h1>Histórico de Carregamentos</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Ponto de Carregamento</th>
+            <th>Data</th>
+            <th>Energia Consumida (kWh)</th>
+            <th>Emissões Evitadas (kg)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="historico : ${historicos}">
+            <td th:text="${historico.id}"></td>
+            <td th:text="${historico.usuario.nome}"></td>
+            <td th:text="${historico.ponto.posto.nome}"></td>
+            <td
+              th:text="${#temporals.format(historico.data, 'dd/MM/yyyy')}"
+            ></td>
+            <td th:text="${historico.consumo}"></td>
+            <td th:text="${historico.emissoes}"></td>
+            <td class="actions">
+              <a
+                th:href="@{/historicos/edit/{id}(id=${historico.id})}"
+                title="Editar"
+                class="action-icon"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+              <a
+                th:href="@{/historicos/delete/{id}(id=${historico.id})}"
+                onclick="return confirm('Tem certeza que deseja deletar este histórico?');"
+                title="Deletar"
+                class="action-icon"
+              >
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <a href="/historicos/create" class="btn-create"
+        ><p>Adicionar Novo Histórico</p>
+        <i class="fas fa-plus"></i>
+      </a>
+    </main>
+  </body>
+</html>

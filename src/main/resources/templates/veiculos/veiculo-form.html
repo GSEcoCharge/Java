@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulário de Veículo</title>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="form-container">
+        <h1 th:text="${veiculo.id == null ? 'Adicionar Veículo' : 'Editar Veículo'}"></h1>
+        <form th:action="@{/veiculos/save}" th:object="${veiculo}" method="post" class="form-flex">
+            <input type="hidden" th:field="*{id}" />
+            <div class="form-group">
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" name="marca" th:field="*{marca}" required />
+                <div class="error" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}"></div>
+            </div>
+            <div class="form-group">
+                <label for="modelo">Modelo:</label>
+                <input type="text" id="modelo" name="modelo" th:field="*{modelo}" required />
+                <div class="error" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}"></div>
+            </div>
+            <div class="form-group">
+                <label for="ano">Ano:</label>
+                <input type="number" id="ano" name="ano" th:field="*{ano}" min="1886" required />
+                <div class="error" th:if="${#fields.hasErrors('ano')}" th:errors="*{ano}"></div>
+            </div>
+            <div class="form-group">
+                <label for="autonomia">Autonomia (km):</label>
+                <input type="number" id="autonomia" name="autonomia" th:field="*{autonomia}" min="0" required />
+                <div class="error" th:if="${#fields.hasErrors('autonomia')}" th:errors="*{autonomia}"></div>
+            </div>
+            <div class="form-group">
+                <label for="conector">Tipo de Conector:</label>
+                <input type="text" id="conector" name="conector" th:field="*{conector}" required />
+                <div class="error" th:if="${#fields.hasErrors('conector')}" th:errors="*{conector}"></div>
+            </div>
+            <div class="form-group">
+                <label for="usuario">Usuário:</label>
+                <select id="usuario" name="usuario" th:field="*{usuario}">
+                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nome}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}"></div>
+            </div>
+            <div class="form-buttons">
+                <a href="/veiculos/view" class="btn-secondary">Cancelar</a>
+                <button type="submit">Salvar</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

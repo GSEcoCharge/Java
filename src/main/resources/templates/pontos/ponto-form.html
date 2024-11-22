@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Formulário de Ponto de Carregamento</title>
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="form-container">
+      <h1
+        th:text="${ponto.id == null ? 'Adicionar Ponto' : 'Editar Ponto'}"
+      ></h1>
+      <form
+        th:action="@{/pontos/save}"
+        th:object="${ponto}"
+        method="post"
+        class="form-flex"
+      >
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group">
+          <label for="posto">Posto:</label>
+          <select id="posto" name="posto" th:field="*{posto}">
+            <option
+              th:each="posto : ${postos}"
+              th:value="${posto.id}"
+              th:text="${posto.nome}"
+            ></option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="conector">Tipo de Conector:</label>
+          <input
+            type="text"
+            id="conector"
+            name="conector"
+            th:field="*{conector}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="carregamento">Velocidade de Carregamento (kW):</label>
+          <input
+            type="number"
+            id="carregamento"
+            name="carregamento"
+            th:field="*{carregamento}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="disponibilidade">Disponibilidade:</label>
+          <input
+            type="text"
+            id="disponibilidade"
+            name="disponibilidade"
+            th:field="*{disponibilidade}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="reservavel">Reservável:</label>
+          <select id="reservavel" name="reservavel" th:field="*{reservavel}">
+            <option value="Y">Sim</option>
+            <option value="N">Não</option>
+          </select>
+        </div>
+        <div class="form-buttons">
+          <a href="/pontos/view" class="btn-secondary">Cancelar</a>
+          <button type="submit">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

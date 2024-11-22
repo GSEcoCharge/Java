@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Formulário de Reserva</title>
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="form-container">
+      <h1
+        th:text="${reserva.id == null ? 'Adicionar Reserva' : 'Editar Reserva'}"
+      ></h1>
+      <form
+        th:action="@{/reservas/save}"
+        th:object="${reserva}"
+        method="post"
+        class="form-flex"
+      >
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group">
+          <label for="usuario">Usuário:</label>
+          <select id="usuario" name="usuario" th:field="*{usuario}">
+            <option
+              th:each="usuario : ${usuarios}"
+              th:value="${usuario.id}"
+              th:text="${usuario.nome}"
+            ></option>
+          </select>
+        </div>
+        <!-- <div class="form-group">
+                <label for="ponto">Ponto de Carregamento:</label>
+                <select id="ponto" name="ponto" th:field="*{ponto}">
+                    <option th:each="ponto : ${pontos}" th:value="${ponto}" th:text="${ponto.nome}"></option>
+                </select>
+            </div> -->
+        <!-- ponto id -->
+        <div class="form-group">
+          <label for="ponto">Ponto de Carregamento:</label>
+          <select id="ponto" name="ponto" th:field="*{ponto}">
+            <option
+              th:each="ponto : ${pontos}"
+              th:value="${ponto.id}"
+              th:text="${ponto.posto.nome}"
+            ></option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="data">Data:</label>
+          <input
+            type="date"
+            id="data"
+            name="data"
+            th:field="*{data}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="status">Status:</label>
+          <select id="status" name="status" th:field="*{status}">
+            <option value="ativa">Ativa</option>
+            <option value="concluída">Concluída</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+        <div class="form-buttons">
+          <a href="/reservas/view" class="btn-secondary">Cancelar</a>
+          <button type="submit">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

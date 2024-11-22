@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><link rel="stylesheet" href="/css/navbar.css" />
+    <title>Lista de Postos de Carregamento</title>
+    <link rel="stylesheet" href="/css/views.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <main>
+        <h1>Lista de Postos de Carregamento</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Endereço</th>
+                    <th>Horário de Funcionamento</th>
+                    <th>Avaliação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="posto : ${postos}">
+                    <td th:text="${posto.id}"></td>
+                    <td th:text="${posto.nome}"></td>
+                    <td th:text="${posto.endereco}"></td>
+                    <td th:text="${posto.expediente}"></td>
+                    <td th:text="${posto.avaliacao}"></td>
+                    <td class="actions">
+                        <a th:href="@{/postos/edit/{id}(id=${posto.id})}" title="Editar" class="action-icon"><i class="fas fa-edit"></i></a>
+                        <a th:href="@{/postos/delete/{id}(id=${posto.id})}" title="Deletar" class="action-icon" onclick="return confirm('Deseja excluir este posto?');"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <a href="/postos/create" class="btn-create"><p>Adicionar Novo Posto</p><i class="fas fa-plus"></i></a>
+    </main>
+</body>
+</html>

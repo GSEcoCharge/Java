@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Formulário de Posto de Carregamento</title>
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="form-container">
+      <h1
+        th:text="${posto.id == null ? 'Adicionar Posto' : 'Editar Posto'}"
+      ></h1>
+      <form
+        th:action="@{/postos/save}"
+        th:object="${posto}"
+        method="post"
+        class="form-flex"
+      >
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group">
+          <label for="nome">Nome:</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            th:field="*{nome}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="latitude">Latitude:</label>
+          <input
+            type="number"
+            step="any"
+            id="latitude"
+            name="latitude"
+            th:field="*{latitude}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="longitude">Longitude:</label>
+          <input
+            type="number"
+            step="any"
+            id="longitude"
+            name="longitude"
+            th:field="*{longitude}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="endereco">Endereço:</label>
+          <input
+            type="text"
+            id="endereco"
+            name="endereco"
+            th:field="*{endereco}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="expediente">Horário de Funcionamento:</label>
+          <input
+            type="text"
+            id="expediente"
+            name="expediente"
+            th:field="*{expediente}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="pagamento">Formas de Pagamento:</label>
+          <input
+            type="text"
+            id="pagamento"
+            name="pagamento"
+            th:field="*{pagamento}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="avaliacao">Avaliação Média:</label>
+          <input
+            type="number"
+            step="0.1"
+            id="avaliacao"
+            name="avaliacao"
+            th:field="*{avaliacao}"
+          />
+        </div>
+        <div class="form-buttons">
+          <a href="/postos/view" class="btn-secondary">Cancelar</a>
+          <button type="submit">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

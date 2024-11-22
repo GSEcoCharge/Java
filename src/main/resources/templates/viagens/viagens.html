@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Lista de Viagens</title>
+    <link rel="stylesheet" href="/css/views.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <main>
+      <h1>Lista de Viagens</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Autonomia Restante</th>
+            <th>Data de Criação</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="viagem : ${viagens}">
+            <td th:text="${viagem.id}"></td>
+            <td th:text="${viagem.usuario.nome}"></td>
+            <td th:text="${viagem.origem}"></td>
+            <td th:text="${viagem.destino}"></td>
+            <td th:text="${viagem.autonomiaRestante}"></td>
+            <td th:text="${#temporals.format(viagem.data, 'dd/MM/yyyy')}"></td>
+            <td class="actions">
+              <a
+                th:href="@{/viagens/edit/{id}(id=${viagem.id})}"
+                title="Editar"
+                class="action-icon"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+              <a
+                th:href="@{/viagens/delete/{id}(id=${viagem.id})}"
+                title="Deletar"
+                class="action-icon"
+                onclick="return confirm('Deseja excluir esta viagem?');"
+              >
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <a href="/viagens/create" class="btn-create"
+        ><p>Adicionar Nova Viagem</p>
+        <i class="fas fa-plus"></i>
+      </a>
+    </main>
+  </body>
+</html>

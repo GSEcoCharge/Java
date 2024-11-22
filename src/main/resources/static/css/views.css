@@ -1,0 +1,103 @@
+body {
+  font-family: "Work Sans", Arial, sans-serif;
+  margin: 0;
+}
+
+main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+h1 {
+  color: #333;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  text-align: center;
+  height: 100%;
+  line-height: 100%;
+}
+
+.action-icon {
+  display: inline-block;
+  width: 33%;
+  font-size: 18px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.action-icon i {
+  vertical-align: middle;
+}
+
+.action-icon[title="Editar"] {
+  color: #007bff;
+}
+.action-icon[title="Editar"]:hover {
+  color: #0056b3;
+}
+
+.action-icon[title="Deletar"] {
+  color: #ff4d4f;
+}
+.action-icon[title="Deletar"]:hover {
+  color: #cc0000;
+}
+
+.btn-create {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #39b54a;
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-create p {
+  margin: 0;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.btn-create i {
+  font-size: 20px;
+}
+
+.btn-create:hover {
+  color: #2d8e3e;
+  text-decoration: none;
+}

@@ -21,7 +21,8 @@ public class PostoCarregamentoService {
     }
 
     public PostoCarregamento findById(Long id) {
-        return postoCarregamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrado o posto de carregamento com o id: " + id));
+        return postoCarregamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Não foi encontrado o posto de carregamento com o id: " + id));
     }
 
     public PostoCarregamento create(PostoCarregamento postoCarregamento) {
@@ -38,11 +39,9 @@ public class PostoCarregamentoService {
         return postoCarregamentoRepository.save(postoCarregamento);
     }
 
-    public void verificarId(Long id){
-        postoCarregamentoRepository.
-        findById(id)
-        .orElseThrow(
-            ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado")
-        );
+    public void verificarId(Long id) {
+        postoCarregamentoRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado"));
     }
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <title>Lista de Reservas</title>
+    <link rel="stylesheet" href="/css/views.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div th:insert="~{navbar :: navbar}"></div>
+    </header>
+
+    <main>
+      <h1>Lista de Reservas</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Ponto de Carregamento</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="reserva : ${reservas}">
+            <td th:text="${reserva.id}"></td>
+            <td th:text="${reserva.usuario.nome}"></td>
+            <td th:text="${reserva.ponto.posto.nome}"></td>
+            <td th:text="${#temporals.format(reserva.data, 'dd/MM/yyyy')}"></td>
+            <td th:text="${#strings.capitalize(reserva.status)}"></td>
+            <td class="actions">
+              <a
+                th:href="@{/reservas/edit/{id}(id=${reserva.id})}"
+                title="Editar"
+                class="action-icon"
+                ><i class="fas fa-edit"></i
+              ></a>
+              <a
+                th:href="@{/reservas/delete/{id}(id=${reserva.id})}"
+                title="Deletar"
+                class="action-icon"
+                onclick="return confirm('Deseja excluir esta reserva?');"
+                ><i class="fas fa-trash"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <a href="/reservas/create" class="btn-create"
+        ><p>Adicionar Nova Reserva</p>
+        <i class="fas fa-plus"></i
+      ></a>
+    </main>
+  </body>
+</html>

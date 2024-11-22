@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head><link rel="stylesheet" href="/css/navbar.css" />
+    <title>EcoCharge - Página Inicial</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <main>
+      <div class="container">
+        <section class="intro">
+          <h1>Bem-vindo ao EcoCharge</h1>
+          <p>
+            <b>EcoCharge</b> é um projeto de aplicativo de transporte sustentável
+            desenvolvido por estudantes da <b>FIAP</b> como parte da Global
+            Solution. Este aplicativo é voltado para promover o uso de veículos
+            elétricos (VEs) ao facilitar o acesso a pontos de carregamento e
+            otimizar o planejamento de viagens. Nossa equipe de cinco integrantes
+            está comprometida em criar uma experiência prática e intuitiva para
+            motoristas de VEs, contribuindo com um futuro mais sustentável.
+          </p>
+        </section>
+        <section class="features">
+          <h2>Funcionalidades</h2>
+          <div class="feature-list">
+            <a th:href="@{/veiculos/view}" class="feature-item">
+              <i class="fas fa-car"></i>
+              <span>Gerenciar Veículos</span>
+            </a>
+            <a th:href="@{/historicos/view}" class="feature-item">
+              <i class="fas fa-history"></i>
+              <span>Histórico de Carregamentos</span>
+            </a>
+            <a th:href="@{/postos/view}" class="feature-item">
+              <i class="fas fa-charging-station"></i>
+              <span>Postos de Carregamento</span>
+            </a>
+            <a th:href="@{/viagens/view}" class="feature-item">
+              <i class="fas fa-route"></i>
+              <span>Planejador de Viagens</span>
+            </a>
+          </div>
+        </section>
+        <section class="team">
+          <h2>Equipe</h2>
+          <div class="team-grid">
+            <div class="team-member">
+              <h3>Augusto Barcelos Barros</h3>
+              <p><b>RM:</b> 98078</p>
+              <p><b>Turma:</b> 2TDSS</p>
+            </div>
+            <div class="team-member">
+              <h3>Izabelly De Oliveira Menezes</h3>
+              <p><b>RM:</b> 551423</p>
+              <p><b>Turma:</b> 2TDSA</p>
+            </div>
+            <div class="team-member">
+              <h3>Lucas Pinheiro de Melo</h3>
+              <p><b>RM:</b> 97707</p>
+              <p><b>Turma:</b> 2TDSS</p>
+            </div>
+            <div class="team-member">
+              <h3>Marcos Henrique Garrido da Silva</h3>
+              <p><b>RM:</b> 99578</p>
+              <p><b>Turma:</b> 2TDSA</p>
+            </div>
+            <div class="team-member">
+              <h3>Mel Maia Rodrigues</h3>
+              <p><b>RM:</b> 98266</p>
+              <p><b>Turma:</b> 2TDSA</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer>
+      <!-- <p>© 2024 EcoCharge. Todos os direitos reservados.</p> link ecocharge to github repo-->
+      <p>© 2024 <a href="https://github.com/GSEcoCharge">EcoCharge</a>. Todos os direitos reservados.</p>
+    </footer>
+  </body>
+</html>
