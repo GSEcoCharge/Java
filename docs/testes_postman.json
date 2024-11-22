@@ -1,0 +1,433 @@
+{
+    "info": {
+        "name": "Testes da Aplicação",
+        "_postman_id": "12345-67890-abcdef",
+        "description": "Coleção de testes para a aplicação",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Obter todos os usuários",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/usuarios",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["usuarios"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 2708
+            }
+        },
+        {
+            "name": "Criar novo usuário",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"senha\": \"senha123\",\n  \"img_perfil\": \"imagem.jpg\",\n  \"ultima_localizacao\": \"SP\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/usuarios",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["usuarios"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 1315
+            }
+        },
+        {
+            "name": "Obter todos os veículos",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/veiculos",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["veiculos"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 1690
+            }
+        },
+        {
+            "name": "Criar novo veículo",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"usuario\": {\n  \"id\": \"6\",\n  \"nome\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"senha\": \"senha123\",\n  \"img_perfil\": \"imagem.jpg\",\n  \"ultima_localizacao\": \"SP\"\n},\n  \"marca\": \"Tesla\",\n  \"modelo\": \"Model S\",\n  \"ano\": 2022,\n  \"autonomia\": 600,\n  \"conector\": \"Tipo 2\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/veiculos",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["veiculos"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 901
+            }
+        },
+        {
+            "name": "Obter todos os postos de carregamento",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/postos",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["postos"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 628
+            }
+        },
+        {
+            "name": "Criar novo posto de carregamento",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nome\": \"Posto Novo\",\n  \"latitude\": -23.5505,\n  \"longitude\": -46.6333,\n  \"endereco\": \"Rua Nova, SP\",\n  \"expediente\": \"24 horas\",\n  \"pagamento\": \"Cartão, Dinheiro\",\n  \"avaliacao\": 4.9\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/postos",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["postos"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 709
+            }
+        },
+        {
+            "name": "Obter todos os pontos de carregamento",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/pontos-carregamento",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["pontos-carregamento"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 1426
+            }
+        },
+        {
+            "name": "Criar novo ponto de carregamento",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"posto\": {\n  \"id\": \"6\",\n  \"nome\": \"Posto Novo\",\n  \"latitude\": -23.5505,\n  \"longitude\": -46.6333,\n  \"endereco\": \"Rua Nova, SP\",\n  \"expediente\": \"24 horas\",\n  \"pagamento\": \"Cartão, Dinheiro\",\n  \"avaliacao\": 4.9\n},\n  \"conector\": \"Tipo 2\",\n  \"carregamento\": 50,\n  \"disponibilidade\": \"disponível\",\n  \"reservavel\": \"S\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/pontos-carregamento",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["pontos-carregamento"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 683
+            }
+        },
+        {
+            "name": "Obter todas as avaliações",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/avaliacoes",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["avaliacoes"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 2110
+            }
+        },
+        {
+            "name": "Criar nova avaliação",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"usuario\": 6,\n  \"posto\": 6,\n  \"nota\": 5,\n  \"comentario\": \"Excelente serviço!\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/avaliacoes",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["avaliacoes"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 717
+            }
+        },
+        {
+            "name": "Obter todos os históricos de carregamento",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/historicos-carregamento",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["historicos-carregamento"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 2169
+            }
+        },
+        {
+            "name": "Criar novo histórico de carregamento",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"usuario\": 6,\n  \"ponto\": 6,\n  \"consumo\": 50,\n  \"emissoes\": 4.5\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/historicos-carregamento",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["historicos-carregamento"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 722
+            }
+        },
+        {
+            "name": "Obter todas as viagens",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/viagens",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["viagens"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 1367
+            }
+        },
+        {
+            "name": "Criar nova viagem",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"usuario_id\": 6,\n  \"origem\": \"São Paulo\",\n  \"destino\": \"Rio de Janeiro\",\n  \"autonomia_restante\": 300\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/viagens",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["viagens"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 692
+            }
+        },
+        {
+            "name": "Obter todas as reservas",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/reservas",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["reservas"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 2124
+            }
+        },
+        {
+            "name": "Criar nova reserva",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"usuario\": 6,\n  \"ponto\": 6,\n  \"data\": \"2023-10-01 10:00:00\",\n  \"status\": \"ativa\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/reservas",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["reservas"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 681
+            }
+        },
+        {
+            "name": "Obter todos os pontos de parada",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/pontos-parada",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["pontos-parada"]
+                }
+            },
+            "response": {
+                "status": "OK",
+                "code": 200,
+                "time": 2106
+            }
+        },
+        {
+            "name": "Criar novo ponto de parada",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"viagem\": 6,\n  \"ponto\": 6,\n  \"ordem\": 1\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/pontos-parada",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["pontos-parada"]
+                }
+            },
+            "response": {
+                "status": "Created",
+                "code": 201,
+                "time": 913
+            }
+        }
+    ]
+}

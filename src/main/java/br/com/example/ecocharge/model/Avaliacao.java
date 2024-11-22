@@ -38,7 +38,6 @@ public class Avaliacao {
     @Column(name = "COMENTARIO")
     private String comentario;
 
-    @NotNull
     @Column(name = "DATA_AVALIACAO")
     private LocalDate data;
 

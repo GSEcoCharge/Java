@@ -35,7 +35,6 @@ public class Viagem {
     @Column(name = "AUTONOMIA_RESTANTE")
     private Integer autonomiaRestante;
 
-    @NotNull
     @Column(name = "DATA_CRIACAO")
     private LocalDate data;
 

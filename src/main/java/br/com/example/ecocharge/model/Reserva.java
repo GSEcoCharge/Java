@@ -40,7 +40,6 @@ public class Reserva {
     @JoinColumn(name = "PONTO_ID")
     private PontoCarregamento ponto;
 
-    @NotNull
     @Column(name = "DATA_RESERVA")
     private LocalDate data;
 

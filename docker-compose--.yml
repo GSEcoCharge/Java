@@ -1,0 +1,51 @@
+# Nome do pipeline
+name: Build_Java_Project_$(Build.BuildId)
+
+# Este pipeline será iniciado manualmente
+trigger: none
+
+# Pool de agentes padrão
+pool:
+  vmImage: 'ubuntu-latest'
+
+# Pipeline
+stages:
+  - stage: BuildAndTest
+    jobs:
+      - job: Build
+        steps:
+          # 1. Fazer checkout do código do repositório
+          - checkout: self
+
+          # 2. Instalar e Configurar Java 17
+          - script: |
+              sudo apt-get update
+              sudo apt-get install -y openjdk-17-jdk
+              export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+              export PATH=$JAVA_HOME/bin:$PATH
+              java -version
+            displayName: 'Instalar e Configurar Java 17'
+
+          # 3. Compilar o projeto e empacotar sem executar testes
+          - task: Maven@4
+            displayName: 'Compilar e Empacotar Projeto'
+            inputs:
+              mavenPomFile: 'pom.xml'
+              goals: 'clean package'
+              mavenOptions: '-Xmx1024m'
+
+          # 4. Executar os testes (JUnit e/ou Selenium)
+          - task: Maven@4
+            displayName: 'Executar Testes Unitários'
+            inputs:
+              mavenPomFile: 'pom.xml'
+              goals: 'test'
+            condition: succeededOrFailed()
+
+          # 5. Publicar os resultados dos testes
+          - task: PublishTestResults@2
+            displayName: 'Publicar Resultados dos Testes Unitários'
+            inputs:
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              testRunTitle: 'Resultados dos Testes Unitários'
+              failTaskOnFailedTests: false

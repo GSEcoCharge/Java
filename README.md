@@ -1,5 +1,17 @@
 # EcoCharge
 
+# Vídeo Pitch
+
+[Link do Video Pitch](https://youtu.be/Ky5cP5GOysk?si=at-Vu5HNZXcJN9AE)
+
+# Vídeo do Código
+
+[Link do Video]()
+
+# Link do Projeto Railway
+
+[Link do Projeto Railway]()
+
 ## Introdução
 
 O uso de veículos elétricos (VEs) tem experimentado um crescimento expressivo nos últimos anos, impulsionado pela urgente necessidade de reduzir as emissões de carbono e cumprir metas globais de sustentabilidade. Os VEs oferecem uma alternativa mais ecológica em comparação aos veículos movidos a combustíveis fósseis, contribuindo para a diminuição da poluição do ar e do impacto ambiental. No entanto, a ampla adoção desses veículos ainda enfrenta desafios significativos, principalmente relacionados à infraestrutura de carregamento e ao planejamento de viagens para veículos com autonomia limitada.
@@ -210,3 +222,7 @@ O sistema está organizado seguindo a arquitetura MVC:
 - **repository**: Classes ou interfaces que definem operações de acesso a dados para interagir com o banco de dados.
 - **service**: Classes que contêm a lógica de negócios da aplicação, intermediando entre os controllers e os repositórios, promovendo a reutilização e a testabilidade do código.
 - **config**: Classes de configurações do projeto, como por exemplo, configurações de segurança.
+
+# Diagrama de Classes e Métodos
+
+![](docs\Java.jpg)

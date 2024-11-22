@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.example.ecocharge.chat.ChatService;
+import br.com.example.ecocharge.mail.EmailService;
 import br.com.example.ecocharge.model.Usuario;
 import br.com.example.ecocharge.repository.UsuarioRepository;
 
@@ -33,17 +36,24 @@ import br.com.example.ecocharge.repository.UsuarioRepository;
 public class UsuarioService extends DefaultOAuth2UserService{
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
     private final UsuarioRepository usuarioRepository;
+    private RabbitTemplate rabbitTemplate;
+    private ChatService chatService;
+    private EmailService emailService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, RabbitTemplate rabbitTemplate, ChatService chatService, EmailService emailService) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.rabbitTemplate = rabbitTemplate;
+        this.chatService = chatService;
+        this.emailService = emailService;
     }
 
     public Usuario create(OAuth2User principal) {
         if (usuarioRepository.findByEmail(principal.getAttribute("email")).isEmpty()){
             Usuario usuario = new Usuario(principal);
             usuario.setSenha(passwordEncoder.encode(principal.getAttribute("email")));
+            return usuarioRepository.save(usuario);
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT, "Atendente já cadastrado");
     }
@@ -70,8 +80,8 @@ public class UsuarioService extends DefaultOAuth2UserService{
     }
 
     public Usuario create(Usuario usuario) {
-        // String script = chatService.sentToAi(usuario);
-        // emailService.sendEmail(usuario.getEmail(), "Bem-vindo ao EcoCharge!", script);
+        String script = chatService.sentToAi(usuario);
+        emailService.sendEmail(usuario.getEmail(), "Bem-vindo ao EcoCharge!", script);
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
@@ -83,6 +93,8 @@ public class UsuarioService extends DefaultOAuth2UserService{
     public Usuario update(Long id, Usuario usuario) {
         verificarId(id);
         usuario.setId(id);
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        rabbitTemplate.convertAndSend("ecocharge-queue", "Usuario alterado: " + usuario);
         return usuarioRepository.save(usuario);
     }
 
@@ -128,7 +140,7 @@ public class UsuarioService extends DefaultOAuth2UserService{
 
             return "Imagem de perfil salva";
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao salvar o arquivo");
+            throw new RuntimeException("Erro ao salvar o arquivo", e);
         }
     }
 
